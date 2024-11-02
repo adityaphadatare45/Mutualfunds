@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio/identity/identity.dart';
 import 'package:portfolio/screens/home.dart';
 
 class SignupPage extends StatefulWidget {
@@ -50,7 +51,7 @@ class _SignupPageState extends State<SignupPage> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder:(context)=>HomePage())
+          MaterialPageRoute(builder:(context)=>IdentityPage())
         );
       }
     } on PlatformException catch (e) {
@@ -70,7 +71,7 @@ class _SignupPageState extends State<SignupPage> {
         // Navigate to the HomePage if fingerprint is not enabled
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => IdentityPage()),
         );
       }
     } else {
