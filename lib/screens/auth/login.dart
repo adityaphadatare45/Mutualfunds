@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:portfolio/identity/verificationpage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -54,6 +55,10 @@ class _LoginPageState extends State<LoginPage> {
     const storedPin = "1234"; // Example stored PIN, replace with actual storage retrieval
     if (_pinController.text == storedPin) {
       _onLoginSuccess();
+       Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => VerificationPage()),
+        );
     } else {
       print("Incorrect MPIN");
     }
@@ -63,7 +68,10 @@ class _LoginPageState extends State<LoginPage> {
   void _onLoginSuccess() {
     // Navigate to the next page or home page
     print("Login Successful!");
+
+   
   }
+
 
   @override
   Widget build(BuildContext context) {
