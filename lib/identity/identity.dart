@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:portfolio/screens/home.dart';
+import 'package:portfolio/screens/auth/signup.dart';
+import 'package:portfolio/screens/home.dart'; // import the Home screen
 
 class IdentityPage extends StatefulWidget {
+  const IdentityPage({super.key});
+
   @override
   _IdentityPageState createState() => _IdentityPageState();
 }
@@ -10,15 +15,17 @@ class _IdentityPageState extends State<IdentityPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _panController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
   DateTime? _selectedDate;
+  bool _isPasswordVisible = false;
 
   // Function for date picking
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
+      firstDate: DateTime(1950),
       lastDate: DateTime.now(),
     );
 
@@ -29,38 +36,67 @@ class _IdentityPageState extends State<IdentityPage> {
     }
   }
 
+  // Function to create a new user in Firebase
+  Future<void> _createUser() async {
+    try {
+      // Create user with email and password
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      // Store user details in Firestore
+      await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({
+        'email': _emailController.text.trim(),
+        'mobile': _mobileController.text.trim(),
+        'pan': _panController.text.trim(),
+        'dob': _selectedDate?.toLocal().toString().split(' ')[0],
+      });
+
+      // Navigate to HomePage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const SignupPage()),
+      );
+    } catch (e) {
+      print("Error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
+    }
+  }
+
   // Handle form submission
   void _handleSubmit() {
     if (_formKey.currentState!.validate()) {
-      // Process the inputs here
-      print("PAN: ${_panController.text}");
-      print("Email: ${_emailController.text}");
-      print("Mobile: ${_mobileController.text}");
-      print("Date of Birth: ${_selectedDate?.toLocal().toString().split(' ')[0]}");
-
-      // Navigate to the HomePage
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+      _createUser();
     }
+  }
+
+  @override
+  void dispose() {
+    _panController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _mobileController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('New User')),
+      appBar: AppBar(title: const Text('New User')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
               // PAN Input
               TextFormField(
                 controller: _panController,
-                decoration: InputDecoration(labelText: 'PAN Number'),
+                decoration: const InputDecoration(labelText: 'PAN Number'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the PAN number';
@@ -71,12 +107,12 @@ class _IdentityPageState extends State<IdentityPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Email Input
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email ID'),
+                decoration: const InputDecoration(labelText: 'Email ID'),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -88,12 +124,41 @@ class _IdentityPageState extends State<IdentityPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+
+              // Password Input with Visibility Toggle
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: !_isPasswordVisible,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the password';
+                  }
+                  if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) {
+                    return 'Enter a valid password';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
 
               // Mobile Input
               TextFormField(
                 controller: _mobileController,
-                decoration: InputDecoration(labelText: 'Mobile Number'),
+                decoration: const InputDecoration(labelText: 'Mobile Number'),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -105,7 +170,7 @@ class _IdentityPageState extends State<IdentityPage> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               // Date of Birth Picker
               Text(
@@ -113,18 +178,18 @@ class _IdentityPageState extends State<IdentityPage> {
                     ? 'Select Date of Birth'
                     : 'Date of Birth: ${_selectedDate?.toLocal().toString().split(' ')[0]}',
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () => _selectDate(context),
-                child: Text('Choose Date of Birth'),
+                child: const Text('Choose Date of Birth'),
               ),
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
 
               // Submit Button
               Center(
                 child: ElevatedButton(
                   onPressed: _handleSubmit,
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ),
             ],

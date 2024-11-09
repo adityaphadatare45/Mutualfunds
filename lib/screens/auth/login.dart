@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:portfolio/identity/verificationpage.dart';
+import 'package:portfolio/verification/verificationpage.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -17,6 +19,12 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     _checkBiometrics();
+  }
+
+  @override
+  void dispose() {
+    _pinController.dispose();
+    super.dispose();
   }
 
   // Check if the device has biometric capabilities
@@ -42,41 +50,41 @@ class _LoginPageState extends State<LoginPage> {
         ),
       );
       if (authenticated) {
-        // Proceed with login
         _onLoginSuccess();
       }
     } on PlatformException catch (e) {
       print("Error authenticating: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.message}")),
+      );
     }
   }
 
   // Handle login process with MPIN
   void _handleLoginWithPin() {
-    const storedPin = "1234"; // Example stored PIN, replace with actual storage retrieval
+    const storedPin = "1234"; // Replace with actual storage retrieval in production
     if (_pinController.text == storedPin) {
       _onLoginSuccess();
-       Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => VerificationPage()),
-        );
     } else {
-      print("Incorrect MPIN");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Incorrect MPIN")),
+      );
     }
   }
 
   // Login success action
   void _onLoginSuccess() {
-    // Navigate to the next page or home page
     print("Login Successful!");
-
-   
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const VerificationPage()),
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -87,21 +95,21 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
               maxLength: 4,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Enter MPIN',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _handleLoginWithPin,
-              child: Text('Login with MPIN'),
+              child: const Text('Login with MPIN'),
             ),
             if (_canCheckBiometrics) ...[
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton.icon(
-                icon: Icon(Icons.fingerprint),
-                label: Text('Login with Fingerprint'),
+                icon: const Icon(Icons.fingerprint),
+                label: const Text('Login with Fingerprint'),
                 onPressed: _authenticateWithFingerprint,
               ),
             ],

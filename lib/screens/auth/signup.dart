@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:portfolio/identity/identity.dart';
-// import 'package:portfolio/screens/home.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:portfolio/screens/home.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -14,13 +16,20 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final TextEditingController _pinController = TextEditingController();
   final LocalAuthentication auth = LocalAuthentication();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool _canCheckBiometrics = false;
-  bool _isFingerprintEnabled = false;
+  bool _isFingerprintEnabled = true;
 
   @override
   void initState() {
     super.initState();
     _checkBiometrics();
+  }
+
+  @override
+  void dispose() {
+    _pinController.dispose();
+    super.dispose();
   }
 
   // Check if the device has biometric capabilities
@@ -46,38 +55,58 @@ class _SignupPageState extends State<SignupPage> {
         ),
       );
       if (authenticated) {
-        // Proceed with login or signup actions
-        print("Authenticated successfully");
-
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder:(context)=>IdentityPage())
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       }
     } on PlatformException catch (e) {
       print("Error authenticating: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error: ${e.message}")),
+      );
     }
   }
 
-    // Handle signup process
+  // Save MPIN to Firestore for the current user
+  Future<void> _saveMpinToFirebase(String mpin) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).set({
+          'mpin': mpin,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+        print("MPIN saved successfully");
+      }
+    } catch (e) {
+      print("Error saving MPIN: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error saving MPIN: ${e.toString()}")),
+      );
+    }
+  }
+
+  // Handle signup process
   void _handleSignup() {
     if (_pinController.text.isNotEmpty && _pinController.text.length == 4) {
-      // Save PIN securely here (use secure storage in production apps)
-      print("MPIN saved successfully");
-      
+      _saveMpinToFirebase(_pinController.text);
+
       if (_isFingerprintEnabled) {
         _authenticateWithFingerprint();
       } else {
-        // Navigate to the HomePage if fingerprint is not enabled
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => IdentityPage()),
+          MaterialPageRoute(builder: (context) => const IdentityPage()),
         );
       }
     } else {
-      print("Enter a 4-digit PIN");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Enter a valid 4-digit PIN")),
+      );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

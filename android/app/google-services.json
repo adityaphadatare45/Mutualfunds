@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "111271853773",
+    "project_id": "mutualfundmanage",
+    "storage_bucket": "mutualfundmanage.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111271853773:android:0b5e630555058756663384",
+        "android_client_info": {
+          "package_name": "com.example.portfolio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZNdn7x5YXZqFlCkNDG_QtxdOgDr0NJks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
