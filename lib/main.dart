@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/identity/identity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'screens/auth/login.dart'; // import login path
-import 'screens/auth/signup.dart'; // import signup path
+// import 'screens/auth/signup.dart'; // import signup path
 import 'screens/home.dart'; // import home page after login
 
 Future<void> main() async {
@@ -71,38 +71,60 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Welcome'),
+        title: const Text('Tri Funds'),
+         backgroundColor: Colors.blue[50], // Transparent background
+             elevation: 0, // Optional: Remove shadow
+                
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Welcome to MutualFunds',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const IdentityPage()),
-                );
-              },
-              child: const Text('Sign Up'),
-            ),
-            const SizedBox(height: 20),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-              },
-              child: const Text('Login'),
-            ),
-          ],
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/main-image.jpg'),
+            fit: BoxFit.cover, // This ensures the image covers the entire screen
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Welcome to Tri Funds',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const IdentityPage()),
+                  );
+                },
+                child: const Text('Sign Up', style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                
+                child: const Text('Login', style: TextStyle(color: Colors.white)),
+              ),
+              const SizedBox(height: 25),
+
+              const Text(
+                'OR',
+                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                textAlign: TextAlign.center,
+                ),
+              
+            ],
+
+           
+          ),
         ),
       ),
     );

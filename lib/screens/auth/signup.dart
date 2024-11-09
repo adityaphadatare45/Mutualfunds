@@ -97,7 +97,7 @@ class _SignupPageState extends State<SignupPage> {
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const IdentityPage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       }
     } else {

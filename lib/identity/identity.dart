@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/auth/signup.dart';
-import 'package:portfolio/screens/home.dart'; // import the Home screen
+ // import 'package:portfolio/screens/home.dart'; // import the Home screen
 
 class IdentityPage extends StatefulWidget {
   const IdentityPage({super.key});
