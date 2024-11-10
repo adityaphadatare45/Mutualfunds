@@ -1,52 +1,53 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart'; // Used to fire base initialization 
 import 'package:flutter/material.dart';
 import 'package:portfolio/identity/identity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // provides persistent storage for simple data
 import 'screens/auth/login.dart'; // import login path
 // import 'screens/auth/signup.dart'; // import signup path
 import 'screens/home.dart'; // import home page after login
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const MyApp());
+Future<void> main() async {                  // main entry point for app 
+  WidgetsFlutterBinding.ensureInitialized(); // initializes the framework before Firebase setup and returns the instance 
+  await Firebase.initializeApp();            // Initialize the firebase with the configuturation of the app , it is a await call so it ensure that firebase is fully initialized before moving to the next step
+  runApp(const MyApp());                     // after firebase is initialized runapp is called to start the flutter app and load the main widget 
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {         // create a class named as MyApp 
+  const MyApp({super.key});                 
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false, // Hide debug banner
+      debugShowCheckedModeBanner: false, // Hide debug banner 
       title: 'Mutual Funds',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const AuthWrapper(), // Use AuthWrapper to handle login state
+      theme: ThemeData(primarySwatch: Colors.blue
+      ),
+      home: const AuthWrapper(), // Use AuthWrapper to handle login state / checks whether the user is logged in and redirects accordingly.
     );
   }
 }
 
-class AuthWrapper extends StatefulWidget {
-  const AuthWrapper({Key? key}) : super(key: key);
+class AuthWrapper extends StatefulWidget { // 
+  const AuthWrapper({super.key});          // 
 
   @override
-  _AuthWrapperState createState() => _AuthWrapperState();
+  _AuthWrapperState createState() => _AuthWrapperState(); // Creates the mutable state for this widget at a given location in the tree.
 }
 
-class _AuthWrapperState extends State<AuthWrapper> {
+class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful widget with boolean _isLoggedIn that indicates login status
   bool _isLoggedIn = false;
 
   @override
-  void initState() {
+  void initState() { // Called when the object is inserted into the tree. // The framework will call this method exactly once for each [State] object it creates.
     super.initState();
     _checkLoginStatus(); // Check login status when the app starts
   }
 
   // Check if the user is logged in
-  Future<void> _checkLoginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false; // Default to false if not found
-    setState(() {
+  Future<void> _checkLoginStatus() async {  // sees the shared preference to retrieve the login status from the persistent storage 
+    final prefs = await SharedPreferences.getInstance(); // allow access to sharedpreference 
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false; // retrive the value associated with the key , if the key isn't found the default value is false 
+    setState(() {                                            // setstate ensures that ui refresh if necessary 
       _isLoggedIn = isLoggedIn;
     });
   }
@@ -56,10 +57,10 @@ class _AuthWrapperState extends State<AuthWrapper> {
     // Wait for the login status to be checked before building the UI
     if (!_isLoggedIn) {
       // If not logged in, show the WelcomeScreen
-      return const HomePage();
+      return const WelcomeScreen();
     } else {
       // If logged in, show the HomePage
-      return const WelcomeScreen();
+      return const HomePage();
     }
   }
 }
@@ -72,12 +73,11 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tri Funds'),
-         backgroundColor: Colors.blue[50], // Transparent background
-             elevation: 0, // Optional: Remove shadow
-                
-      ),
+         backgroundColor: Colors.blue[50], // 
+             elevation: 0, //          
+        ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/main-image.jpg'),
             fit: BoxFit.cover, // This ensures the image covers the entire screen
