@@ -126,7 +126,7 @@ class _VerificationPageState extends State<VerificationPage> {
                   },
                 ),
                 const Text('Email'),
-                Radio<String>(
+                Radio<String>(         //  when the radio button is selected, the widget calls the [onChanged] callback.
                   value: 'pan',
                   groupValue: selectedOption,
                   onChanged: (value) {

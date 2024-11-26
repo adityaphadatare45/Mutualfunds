@@ -7,8 +7,14 @@ import 'screens/auth/login.dart'; // import login path
 import 'screens/home.dart'; // import home page after login
 
 Future<void> main() async {                  // main entry point for app 
-  WidgetsFlutterBinding.ensureInitialized(); // initializes the framework before Firebase setup and returns the instance 
+  WidgetsFlutterBinding.  // when we need to use fire base or other things we need the flutter engine be fully prepared 
+     ensureInitialized(); // initializes the framework before Firebase setup and returns the instance , 
+  // called to make sure the app is ready for Firebase initialization. 
+  //  used in Flutter to initialize the framework before any other Flutter-related operations. 
+  // It essentially ensures that the Flutter engine is fully initialized before you perform tasks that rely on it
+ 
   await Firebase.initializeApp();            // Initialize the firebase with the configuturation of the app , it is a await call so it ensure that firebase is fully initialized before moving to the next step
+                                             // await tell that the following statement will return the future (await is keyword)
   runApp(const MyApp());                     // after firebase is initialized runapp is called to start the flutter app and load the main widget 
 }
 
@@ -27,7 +33,7 @@ class MyApp extends StatelessWidget {         // create a class named as MyApp
   }
 }
 
-class AuthWrapper extends StatefulWidget { // 
+class AuthWrapper extends StatefulWidget { //  A widget that has mutable state 
   const AuthWrapper({super.key});          // 
 
   @override
@@ -48,7 +54,7 @@ class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful 
     final prefs = await SharedPreferences.getInstance(); // allow access to sharedpreference 
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false; // retrive the value associated with the key , if the key isn't found the default value is false 
     setState(() {                                            // setstate ensures that ui refresh if necessary 
-      _isLoggedIn = isLoggedIn;
+      _isLoggedIn = isLoggedIn; 
     });
   }
 
@@ -93,17 +99,17 @@ class WelcomeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
-              TextButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const IdentityPage()),
                   );
                 },
-                child: const Text('Sign Up', style: TextStyle(color: Colors.white)),
+                child: const Text('Sign Up', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(height: 20),
-              TextButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -111,7 +117,7 @@ class WelcomeScreen extends StatelessWidget {
                   );
                 },
                 
-                child: const Text('Login', style: TextStyle(color: Colors.white)),
+                child: const Text('Login', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(height: 25),
 

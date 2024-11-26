@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart'; //  packages for handling
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart'; // provides local authentication 
 import 'package:flutter/services.dart';
-import 'package:portfolio/screens/home.dart';
+ // import 'package:portfolio/screens/home.dart';
 import 'package:portfolio/verification/verificationpage.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // provides persistent storage for simple data 
 
@@ -66,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // Handle login process with MPIN and PAN
-  Future<void> _handleLoginWithPin() async {        // uses the firestore to verify if the entered pan ans pin is stored in the firestore database 
+  Future<void> _handleLoginWithPin() async {        // uses the firestore to verify if the entered pan and pin is stored in the firestore database 
     String enteredPan = _panController.text.trim(); // use to get user inputs 
     String enteredPin = _pinController.text.trim();
 
@@ -112,17 +112,31 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {  // build method is override 
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
-      body: Padding(
+      appBar: AppBar(title: const Text('Login'),
+       backgroundColor: Colors.blue[50]
+      ),
+      body: Container(
+        decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/main-image.jpg'), // Replace with your image path
+          fit: BoxFit.cover,
+        ),
+       ),
+      
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: _panController,
-              decoration: const InputDecoration(
+              decoration:InputDecoration(
                 labelText: 'Enter PAN',
-                border: OutlineInputBorder(),
+                fillColor: Colors.white70,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0)
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -131,15 +145,19 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true,
               maxLength: 4,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
+              decoration:  InputDecoration(
                 labelText: 'Enter MPIN',
-                border: OutlineInputBorder(),
+                fillColor: Colors.white70,
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0)
+                ),
               ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _handleLoginWithPin,
-              child: const Text('Login'),
+              child:  const Text('Login', style: TextStyle(color: Colors.black),),
             ),
             if (_canCheckBiometrics) ...[
               const SizedBox(height: 20),
@@ -152,6 +170,7 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
+     ),
     );
   }
 }

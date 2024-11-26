@@ -28,7 +28,8 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              logout(context);  // Call logout function
+              logout(context);  
+                      // Call logout functions
             },
           ),
         ],

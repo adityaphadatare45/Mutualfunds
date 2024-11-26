@@ -43,15 +43,17 @@ class _IdentityPageState extends State<IdentityPage> {   //
   Future<void> _createUser() async {
     try {
       // Create user with email and password
-      UserCredential userCredential = await FirebaseAuth.instance
+      UserCredential userCredential =  // usercreadential is set of unique identifiers // creates the unique id for authentication 
+      await FirebaseAuth.instance  // The entry point of the firebase auth 
           .createUserWithEmailAndPassword(                        // tries to create new user with given email and password  
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
       // Store user details in Firestore
-      await FirebaseFirestore.instance.collection('users').doc(userCredential.user?.uid).set({  // stores the additional data to firestore under users with unique id to each user
-        'email': _emailController.text.trim(),
+      await FirebaseFirestore.instance.collection('users'). // stores the additional data to firestore under users with unique id to each user
+        doc(userCredential.user?.uid).set({                 // uses the already created users unique id to save the additional info of that user under that unique id 
+        // 'email': _emailController.text.trim(),
         'mobile': _mobileController.text.trim(),
         'pan': _panController.text.trim(),
         'dob': _selectedDate?.toLocal().toString().split(' ')[0],
@@ -83,7 +85,7 @@ class _IdentityPageState extends State<IdentityPage> {   //
   }
 
   @override
-  void dispose() {             // Dispose method clears the controllers when the widget is removed from the widget tree 
+  void dispose() {             // Dispose method clears the controllers when the widgets state is changed 
     _panController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -92,11 +94,20 @@ class _IdentityPageState extends State<IdentityPage> {   //
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('New User')),
-      body: Padding(
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(title: const Text('New User'),
+    backgroundColor: Colors.blue[50],
+    ),
+    body: Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/main-image.jpg'), // Replace with your image path
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
@@ -105,12 +116,19 @@ class _IdentityPageState extends State<IdentityPage> {   //
               // PAN Input
               TextFormField(
                 controller: _panController,
-                decoration: const InputDecoration(labelText: 'PAN Number'),
+                decoration:  InputDecoration(
+                  labelText: 'PAN Number',
+                  filled: true,
+                  fillColor: Colors.white70, // Makes input field readable
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20.0)
+                  ),
+                ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the PAN number';
                   }
-                  if (!RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$').hasMatch(value)) {  /// checks the regular expression match the input 
+                  if (!RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$').hasMatch(value)) {
                     return 'Enter a valid PAN number';
                   }
                   return null;
@@ -121,13 +139,20 @@ class _IdentityPageState extends State<IdentityPage> {   //
               // Email Input
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email ID'),
+                decoration:InputDecoration(
+                  labelText: 'Email ID',
+                  filled: true,
+                  fillColor: Colors.white70,
+                  border: OutlineInputBorder(
+                     borderRadius:  BorderRadius.circular(20.0)
+                  ),
+                ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email';
                   }
-                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) { /// checks the regular expression match the input 
+                  if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                     return 'Enter a valid email address';
                   }
                   return null;
@@ -140,9 +165,16 @@ class _IdentityPageState extends State<IdentityPage> {   //
                 controller: _passwordController,
                 decoration: InputDecoration(
                   labelText: 'Password',
+                  filled: true,
+                  fillColor: Colors.white70,
+                   border: OutlineInputBorder(
+                     borderRadius:  BorderRadius.circular(20.0)
+                  ),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                     onPressed: () {
                       setState(() {
@@ -156,7 +188,9 @@ class _IdentityPageState extends State<IdentityPage> {   //
                   if (value == null || value.isEmpty) {
                     return 'Please enter the password';
                   }
-                  if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$').hasMatch(value)) { /// checks the regular expression match the input 
+                  if (!RegExp(
+                          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')
+                      .hasMatch(value)) {
                     return 'Enter a valid password';
                   }
                   return null;
@@ -167,13 +201,20 @@ class _IdentityPageState extends State<IdentityPage> {   //
               // Mobile Input
               TextFormField(
                 controller: _mobileController,
-                decoration: const InputDecoration(labelText: 'Mobile Number'),
+                decoration: InputDecoration(
+                  labelText: 'Mobile Number',
+                  filled: true,
+                  fillColor: Colors.white70,
+                   border: OutlineInputBorder(
+                     borderRadius:  BorderRadius.circular(20.0)
+                  ),
+                ),
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your mobile number';
                   }
-                  if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) { /// checks the regular expression match the input 
+                  if (!RegExp(r'^[6-9]\d{9}$').hasMatch(value)) {
                     return 'Enter a valid 10-digit mobile number';
                   }
                   return null;
@@ -181,17 +222,22 @@ class _IdentityPageState extends State<IdentityPage> {   //
               ),
               const SizedBox(height: 20),
 
+              // MPIN Input
               TextFormField(
-               controller: _pinController,
-               obscureText: true,
-               maxLength: 4,
-               keyboardType: TextInputType.number,
-               decoration: const InputDecoration(
-                labelText: 'Enter 4-digit MPIN',
-               // border: OutlineInputBorder(),
-               ),
+                controller: _pinController,
+                obscureText: true,
+                maxLength: 4,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Enter 4-digit MPIN',
+                  filled: true,
+                   border: OutlineInputBorder(
+                     borderRadius:  BorderRadius.circular(20.0)
+                  ),
+                  fillColor: Colors.white70,
+                ),
               ),
-              const SizedBox(height:20),
+              const SizedBox(height: 20),
 
               // Date of Birth Picker
               Text(
@@ -200,23 +246,34 @@ class _IdentityPageState extends State<IdentityPage> {   //
                     : 'Date of Birth: ${_selectedDate?.toLocal().toString().split(' ')[0]}',
               ),
               const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () => _selectDate(context),
-                child: const Text('Choose Date of Birth'),
-              ),
+             ElevatedButton(
+             onPressed: () => _selectDate(context),
+              style: ElevatedButton.styleFrom(
+              fixedSize:  const Size(50, 50), // Width: 200, Height: 50
+             backgroundColor: Colors.white, // Button background color
+              elevation: 5, // Shadow effect
+               ),
+               child: const Text(
+                'Choose Date of Birth',
+                  style: TextStyle(color: Colors.black), // Text color
+                 ),
+             ),
+
               const SizedBox(height: 40),
 
               // Submit Button
               Center(
                 child: ElevatedButton(
                   onPressed: _handleSubmit,
-                  child: const Text('Submit'),
+                  child: const Text('Submit',style: TextStyle(color: Colors.black),),
                 ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

@@ -106,47 +106,56 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Signup')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _pinController,
-              obscureText: true,
-              maxLength: 4,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Enter 4-digit MPIN',
-                border: OutlineInputBorder(),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/main-image.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextField(
+                controller: _pinController,
+                obscureText: true,
+                maxLength: 4,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Enter 4-digit MPIN',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            if (_canCheckBiometrics)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Enable Fingerprint Authentication'),
-                  Switch(
-                    value: _isFingerprintEnabled,
-                    onChanged: (value) {
-                      setState(() {
-                        _isFingerprintEnabled = value;
-                      });
-                    },
-                  ),
-                ],
+              const SizedBox(height: 20),
+              if (_canCheckBiometrics)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Enable Fingerprint Authentication'),
+                    Switch(
+                      value: _isFingerprintEnabled,
+                      onChanged: (value) {
+                        setState(() {
+                          _isFingerprintEnabled = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _handleSignup,
+                child: const Text('Sign Up'),
               ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _handleSignup,
-              child: const Text('Sign Up'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
