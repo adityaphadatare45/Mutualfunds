@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart'; // Used to fire base initialization 
 import 'package:flutter/material.dart';
 import 'package:portfolio/identity/identity.dart';
@@ -5,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart'; // provides persist
 import 'screens/auth/login.dart'; // import login path
 // import 'screens/auth/signup.dart'; // import signup path
 import 'screens/home.dart'; // import home page after login
-
+import 'package:portfolio/screens/auth/authservices.dart';
 Future<void> main() async {                  // main entry point for app 
   WidgetsFlutterBinding.  // when we need to use fire base or other things we need the flutter engine be fully prepared 
      ensureInitialized(); // initializes the framework before Firebase setup and returns the instance , 
@@ -42,6 +43,7 @@ class AuthWrapper extends StatefulWidget { //  A widget that has mutable state
 
 class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful widget with boolean _isLoggedIn that indicates login status
   bool _isLoggedIn = false;
+  User? _user;
 
   @override
   void initState() { // Called when the object is inserted into the tree. // The framework will call this method exactly once for each [State] object it creates.
@@ -53,8 +55,11 @@ class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful 
   Future<void> _checkLoginStatus() async {  // sees the shared preference to retrieve the login status from the persistent storage 
     final prefs = await SharedPreferences.getInstance(); // allow access to sharedpreference 
     final isLoggedIn = prefs.getBool('isLoggedIn') ?? false; // retrive the value associated with the key , if the key isn't found the default value is false 
+
+    final currentUser = FirebaseAuth.instance.currentUser;
     setState(() {                                            // setstate ensures that ui refresh if necessary 
-      _isLoggedIn = isLoggedIn; 
+      _isLoggedIn = isLoggedIn && currentUser != null; 
+      _user = currentUser;
     });
   }
 
@@ -66,7 +71,7 @@ class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful 
       return const WelcomeScreen();
     } else {
       // If logged in, show the HomePage
-      return const HomePage();
+      return HomePage(user:_user!);
     }
   }
 }
@@ -126,10 +131,25 @@ class WelcomeScreen extends StatelessWidget {
                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 textAlign: TextAlign.center,
                 ),
-              
-            ],
+              const SizedBox(height: 20,),
 
-           
+              ElevatedButton.icon(icon: const Icon(Icons.g_mobiledata),
+              onPressed: () async{
+                final user = await Authservices().signInWithGoogle();
+                if (user != null){
+                  Navigator.pushReplacement(
+                    context,
+                   MaterialPageRoute(builder:(context)=> HomePage(user:user)),
+                  );
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text("Google Sign-In failed")),
+                  );
+                }
+               },
+               label: const Text('Google'),
+              ),
+            ], 
           ),
         ),
       ),

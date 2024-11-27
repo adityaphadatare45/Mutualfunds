@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // provides persistent storage for simple data
 import 'package:portfolio/main.dart'; // Ensure this path is correct for importing WelcomeScreen
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+   final User user;
+  const HomePage({super.key, required this.user});
 
   // Logout function that clears login state and navigates to WelcomeScreen
   Future<void> logout(BuildContext context) async {    // logout is asynchronous function that performs two actions 
@@ -38,28 +40,11 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.home,
-              size: 100,
-              color: Colors.blue,
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Welcome to the Home Page!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'You are now logged in.',
-              style: TextStyle(fontSize: 18, color: Colors.grey[600]),
-            ),
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () {
-                print("Explore More Features clicked");
-              },
-              child: const Text('Explore More Features'),
+            Text("Welcome, ${user.displayName ?? 'User'}"),
+            Text("Email: ${user.email ?? 'N/A'}"),
+            CircleAvatar(
+              backgroundImage: NetworkImage(user.photoURL ?? ''),
+              radius: 40,
             ),
           ],
         ),

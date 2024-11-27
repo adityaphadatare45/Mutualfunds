@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 
@@ -15,6 +16,8 @@ class _PanVerification extends State<PanVerify>{
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _panController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
+  User? _user;
+
 
 
 
@@ -28,7 +31,7 @@ class _PanVerification extends State<PanVerify>{
       // Navigate to the HomePage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(builder: (context) => HomePage(user: _user!)),
       );
     }
   }

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // fetch the users record to validate 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 // import 'package:portfolio/verification/verifypan.dart'; // imports necessary packages
@@ -14,6 +15,7 @@ class _VerificationPageState extends State<VerificationPage> {
   String selectedOption = 'pan'; // Default selection
   final emailController = TextEditingController(); // used to manage users input 
   final panController = TextEditingController();
+  User?_user;
 
   @override
   void dispose() {                //  Dispose method clears the controllers when the widget is removed from the widget tree 
@@ -98,7 +100,7 @@ class _VerificationPageState extends State<VerificationPage> {
   void _navigateToHomePage() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) =>  HomePage(user: _user!)),
     );
   }
 
