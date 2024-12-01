@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/identity/identity.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // provides persistent storage for simple data
 import 'screens/auth/login.dart'; // import login path
-// import 'screens/auth/signup.dart'; // import signup path
+import 'package:portfolio/screens/auth/authservices.dart'; 
 import 'screens/home.dart'; // import home page after login
-import 'package:portfolio/screens/auth/authservices.dart';
+// import 'package:portfolio/screens/auth/authservices.dart';
 Future<void> main() async {                  // main entry point for app 
   WidgetsFlutterBinding.  // when we need to use fire base or other things we need the flutter engine be fully prepared 
      ensureInitialized(); // initializes the framework before Firebase setup and returns the instance , 
@@ -14,7 +14,7 @@ Future<void> main() async {                  // main entry point for app
   //  used in Flutter to initialize the framework before any other Flutter-related operations. 
   // It essentially ensures that the Flutter engine is fully initialized before you perform tasks that rely on it
  
-  await Firebase.initializeApp();            // Initialize the firebase with the configuturation of the app , it is a await call so it ensure that firebase is fully initialized before moving to the next step
+  await Firebase.initializeApp();              // Initialize the firebase with the configuturation of the app , it is a await call so it ensure that firebase is fully initialized before moving to the next step
                                              // await tell that the following statement will return the future (await is keyword)
   runApp(const MyApp());                     // after firebase is initialized runapp is called to start the flutter app and load the main widget 
 }
@@ -43,7 +43,7 @@ class AuthWrapper extends StatefulWidget { //  A widget that has mutable state
 
 class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful widget with boolean _isLoggedIn that indicates login status
   bool _isLoggedIn = false;
-  User? _user;
+ // User? _user;
 
   @override
   void initState() { // Called when the object is inserted into the tree. // The framework will call this method exactly once for each [State] object it creates.
@@ -59,10 +59,10 @@ class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful 
     final currentUser = FirebaseAuth.instance.currentUser;
     setState(() {                                            // setstate ensures that ui refresh if necessary 
       _isLoggedIn = isLoggedIn && currentUser != null; 
-      _user = currentUser;
+     // _user = currentUser;
     });
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     // Wait for the login status to be checked before building the UI
@@ -70,8 +70,8 @@ class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful 
       // If not logged in, show the WelcomeScreen
       return const WelcomeScreen();
     } else {
-      // If logged in, show the HomePage
-      return HomePage(user:_user!);
+      // If logged in , show the home screen 
+      return HomePage();
     }
   }
 }
@@ -84,14 +84,14 @@ class WelcomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tri Funds'),
-         backgroundColor: Colors.blue[50], // 
-             elevation: 0, //          
-        ),
+        backgroundColor: Colors.blue[50],
+        elevation: 0,
+      ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/main-image.jpg'),
-            fit: BoxFit.cover, // This ensures the image covers the entire screen
+            fit: BoxFit.cover,
           ),
         ),
         child: Center(
@@ -121,35 +121,33 @@ class WelcomeScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const LoginPage()),
                   );
                 },
-                
                 child: const Text('Login', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(height: 25),
-
               const Text(
                 'OR',
-                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 textAlign: TextAlign.center,
-                ),
-              const SizedBox(height: 20,),
-
-              ElevatedButton.icon(icon: const Icon(Icons.g_mobiledata),
-              onPressed: () async{
-                final user = await Authservices().signInWithGoogle();
-                if (user != null){
-                  Navigator.pushReplacement(
-                    context,
-                   MaterialPageRoute(builder:(context)=> HomePage(user:user)),
-                  );
-                }else{
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Google Sign-In failed")),
-                  );
-                }
-               },
-               label: const Text('Google'),
               ),
-            ], 
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.fingerprint),
+                onPressed: () async {
+                  bool authenticated = await AuthService().authenticateWithFingerprint(context);
+                  if (authenticated) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Fingerprint authentication failed")),
+                    );
+                  }
+                },
+                label: const Text('Login with Fingerprint'),
+              ),
+            ],
           ),
         ),
       ),

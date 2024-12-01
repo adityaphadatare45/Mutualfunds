@@ -16,7 +16,7 @@ class _PanVerification extends State<PanVerify>{
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _panController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
-  User? _user;
+  
 
 
 
@@ -31,7 +31,7 @@ class _PanVerification extends State<PanVerify>{
       // Navigate to the HomePage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage(user: _user!)),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     }
   }

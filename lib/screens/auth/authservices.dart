@@ -1,30 +1,53 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+// auth_service.dart
+import 'package:local_auth/local_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // for shared preferences
 
-class Authservices {
-  final FirebaseAuth _auth =FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+class AuthService {
+  final LocalAuthentication _localAuth = LocalAuthentication();
 
-  Future<User?> signInWithGoogle() async{
-    try {
-      GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-       if( googleUser == null )  return null;
-        
-      final GoogleSignInAuthentication? gooleAuth = await googleUser?.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: gooleAuth?.accessToken,
-        idToken: gooleAuth?.idToken
+  // Method to authenticate with fingerprint
+  Future<bool> authenticateWithFingerprint(BuildContext context) async {
+    final bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
+    if (!canCheckBiometrics) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Fingerprint authentication not available')),
       );
-       
-       final UserCredential userCredential = await _auth.signInWithCredential(credential);
-       return userCredential.user;
+      return false;
+    }
+
+    try {
+      final bool authenticated = await _localAuth.authenticate(
+        localizedReason: 'Authenticate to access your account',
+        options: const AuthenticationOptions(
+          biometricOnly: true, // Use only biometrics
+        ),
+      );
+
+      if (authenticated) {
+        // Save login status in SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLoggedIn', true); // Save login status as true
+      }
+      
+      return authenticated;
     } catch (e) {
-      print("Google Sign-In Error:$e");
-      return null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Authentication error: $e')),
+      );
+      return false;
     }
   }
-  Future<void> signOut() async{
-    await _auth.signOut();
-    await _googleSignIn.signOut();
+
+  // Method to check if the user is logged in
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false; // Returns false if the key is not found
+  }
+
+  // Method to log out and clear the saved login status
+  Future<void> logOut() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', false); // Set login status to false (log out)
   }
 }

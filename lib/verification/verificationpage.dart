@@ -15,7 +15,7 @@ class _VerificationPageState extends State<VerificationPage> {
   String selectedOption = 'pan'; // Default selection
   final emailController = TextEditingController(); // used to manage users input 
   final panController = TextEditingController();
-  User?_user;
+ // User?_user;
 
   @override
   void dispose() {                //  Dispose method clears the controllers when the widget is removed from the widget tree 
@@ -100,7 +100,7 @@ class _VerificationPageState extends State<VerificationPage> {
   void _navigateToHomePage() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) =>  HomePage(user: _user!)),
+      MaterialPageRoute(builder: (context) => HomePage()),
     );
   }
 

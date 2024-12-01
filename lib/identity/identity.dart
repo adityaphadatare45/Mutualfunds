@@ -22,7 +22,7 @@ class _IdentityPageState extends State<IdentityPage> {   //
   final TextEditingController _pinController = TextEditingController();
   DateTime? _selectedDate;                                               // stores the selected date 
   bool _isPasswordVisible = false;                                       // for visibility of password
-  User?_user;
+
 
   // Function for date picking
   Future<void> _selectDate(BuildContext context) async {  // opens a date picker so user can choose their birth date 
@@ -68,7 +68,7 @@ class _IdentityPageState extends State<IdentityPage> {   //
       // Navigate to HomePage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  HomePage(user: _user!)),
+        MaterialPageRoute(builder: (context) =>  HomePage()),
       );
     } catch (e) {
       print("Error: $e");

@@ -1,14 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // provides persistent storage for simple data
-import 'package:portfolio/main.dart'; // Ensure this path is correct for importing WelcomeScreen
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:portfolio/main.dart'; // Ensure this path is correct
 
 class HomePage extends StatelessWidget {
-   final User user;
-  const HomePage({super.key, required this.user});
+  const HomePage({super.key});
 
   // Logout function that clears login state and navigates to WelcomeScreen
-  Future<void> logout(BuildContext context) async {    // logout is asynchronous function that performs two actions 
+  Future<void> logout(BuildContext context) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', false);  // Clear login state
     await prefs.setBool('isSignedIn', false);  // Clear sign-up state
@@ -30,8 +28,7 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              logout(context);  
-                      // Call logout functions
+              logout(context); // Call logout function
             },
           ),
         ],
@@ -39,13 +36,9 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Welcome, ${user.displayName ?? 'User'}"),
-            Text("Email: ${user.email ?? 'N/A'}"),
-            CircleAvatar(
-              backgroundImage: NetworkImage(user.photoURL ?? ''),
-              radius: 40,
-            ),
+          children: const [
+            Text("Welcome to the Home Page!"),
+            Text("Enjoy using the app."),
           ],
         ),
       ),
