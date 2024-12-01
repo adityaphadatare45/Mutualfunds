@@ -23,6 +23,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
+        backgroundColor: Colors.blue[50],
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
@@ -33,15 +34,16 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text("Welcome to the Home Page!"),
-            Text("Enjoy using the app."),
-          ],
-        ),
-      ),
+      body:Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+            image: AssetImage('assets/images/main-image.jpg'),
+            fit: BoxFit.cover,
+          ),
+          ),
+      
+    
+     ),
     );
   }
 }

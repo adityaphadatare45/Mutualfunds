@@ -59,7 +59,7 @@ class _AuthWrapperState extends State<AuthWrapper> { // authwrapper is stateful 
     final currentUser = FirebaseAuth.instance.currentUser;
     setState(() {                                            // setstate ensures that ui refresh if necessary 
       _isLoggedIn = isLoggedIn && currentUser != null; 
-     // _user = currentUser;
+  
     });
   }
  
