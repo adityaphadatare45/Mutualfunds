@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // fetch the users record to validate 
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 // import 'package:portfolio/verification/verifypan.dart'; // imports necessary packages
