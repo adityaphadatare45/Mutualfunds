@@ -130,23 +130,7 @@ class WelcomeScreen extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.fingerprint),
-                onPressed: () async {
-                  bool authenticated = await AuthService().authenticateWithFingerprint(context);
-                  if (authenticated) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage()),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Fingerprint authentication failed")),
-                    );
-                  }
-                },
-                label: const Text('Login with Fingerprint'),
-              ),
+             
             ],
           ),
         ),

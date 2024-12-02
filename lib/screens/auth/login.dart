@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart'; // packages for handling database operations
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // provides persistent storage for simple data 
-
+import 'package:local_auth/local_auth.dart';
 import 'package:portfolio/verification/verificationpage.dart'; // Custom verification page
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +14,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _pinController = TextEditingController(); // controls the text fields
   final TextEditingController _panController = TextEditingController();
+  
+  get onPrimary => null;
 
   @override
   void dispose() { // clears all the state when the widget is removed from the widget tree
@@ -52,12 +54,43 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+   Future<bool>_checkIfExistingUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isExistingUser') ?? false;
+   }
+
   // Login success action
   Future<void> _onLoginSuccess() async { // when login is successful, navigate to the verification page
     print("Login Successful!");
 
     final prefs = await SharedPreferences.getInstance(); // shared preferences store the login status of the user
     await prefs.setBool('isLoggedIn', true); // sets the 'isLoggedIn' key to true
+    await prefs.setBool('isExistingUser', true);
+     final LocalAuthentication auth = LocalAuthentication();
+  bool canCheckBiometrics = await auth.canCheckBiometrics;
+
+  if (canCheckBiometrics) {
+    bool authenticated = await auth.authenticate(
+      localizedReason: 'Authenticate',
+      options: const AuthenticationOptions(
+        biometricOnly: true,
+      ),
+    );
+
+    if (authenticated) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const VerificationPage()),
+      );
+      return; // Prevent further navigation
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Fingerprint authentication failed")),
+      );
+      return; // Avoid duplicate navigation
+    }
+  }
+
 
     Navigator.pushReplacement(
       context,
@@ -66,62 +99,111 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) { // builds the widget tree
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login'),
-        backgroundColor: Colors.blue[50],
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/main-image.jpg'), // Replace with your image path
-            fit: BoxFit.cover,
-          ),
+Widget build(BuildContext context) {
+  return FutureBuilder<bool>(
+    future: _checkIfExistingUser(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+      bool isExistingUser = snapshot.data ?? false;
+
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Login'),
+          backgroundColor: Colors.blue[50],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                controller: _panController,
-                decoration: InputDecoration(
-                  labelText: 'Enter PAN',
-                  fillColor: Colors.white70,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/main-image.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _panController,
+                  decoration: InputDecoration(
+                    labelText: 'Enter PAN',
+                    fillColor: Colors.white70,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _pinController,
-                obscureText: true,
-                maxLength: 4,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Enter MPIN',
-                  fillColor: Colors.white70,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _pinController,
+                  obscureText: true,
+                  maxLength: 4,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Enter MPIN',
+                    fillColor: Colors.white70,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _handleLoginWithPin,
-                child: const Text(
-                  'Login',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                if (isExistingUser)
+                  ElevatedButton(
+                    onPressed: () async {
+                      final LocalAuthentication auth = LocalAuthentication();
+                      bool authenticated = await auth.authenticate(
+                        localizedReason: 'Authenticate to login',
+                        options: const AuthenticationOptions(
+                          biometricOnly: true,
+                        ),
+                      );
+
+                      if (authenticated) {
+                        _handleLoginWithPin();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Authentication failed")),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.black,
+                       backgroundColor: Colors.white10,
+                       shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                       ),
+                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),  // Padding around the text
+                       elevation: 5,  // Shadow effect
+                    ),
+                    child: const Text('Login with Fingerprint'),
+                  ),
+               if (!isExistingUser)
+                 ElevatedButton(
+                 onPressed: _handleLoginWithPin,
+                 style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.black, backgroundColor: Colors.white70,  // Text color
+                 shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),  // Rounded corners
+                 ),
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),  // Padding around the text
+                 elevation: 5,  // Shadow effect
+                  ),
+                 child: const Text(
+                 'Login',
+                 style: TextStyle(color: Colors.black),  // Text color
+                    ),
+                   ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
+    },
+  );
+ }
 }
