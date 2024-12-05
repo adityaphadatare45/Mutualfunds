@@ -76,7 +76,9 @@ class _IdentityPageState extends State<IdentityPage> {   //
         SnackBar(content: Text("Error: ${e.toString()}")),
       );
     }
-  }
+  } 
+
+  
 
   // Handle form submission
   void _handleSubmit() {     // validate the form inputs , if it is valid it calls the createuser method 
