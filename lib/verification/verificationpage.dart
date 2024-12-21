@@ -110,7 +110,12 @@ class _VerificationPageState extends State<VerificationPage> {
       appBar: AppBar(
         title: const Text('Verification Page'),
       ),
-      body: Padding(
+      body: Container(
+        decoration:BoxDecoration(
+          image: DecorationImage(image: AssetImage('assets/images/main-image.jpg'),
+           fit: BoxFit.cover,
+          ),
+        ),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,6 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:portfolio/screens/home.dart';
+// import 'package:portfolio/screens/home.dart';
 
 class PanVerify extends StatefulWidget{
   
@@ -21,8 +21,8 @@ class _PanVerification extends State<PanVerify>{
 
 
 
-  void _handleSubmit() {  // hecks if all form fields are valid using _formKey.currentState!.validate().
-    if (_formKey.currentState!.validate()) { // if the values are correct then it will navigate to homepage 
+  /*void _handleSubmit() {  // hecks if all form fields are valid using _formKey.currentState!.validate().
+    if (_formKey.currentState!.validate()) { // if the values are correct then it will navigate to homepage  
       // Process the inputs here
       print("PAN: ${_panController.text}");
       print("OTP:${_otpController.text}");
@@ -34,7 +34,7 @@ class _PanVerification extends State<PanVerify>{
         MaterialPageRoute(builder: (context) => HomePage()),
       );
     }
-  }
+  }*/
 
    // Future <void>
   @override
