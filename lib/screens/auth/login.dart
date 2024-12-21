@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // provides persistent storage for simple data 
+import 'package:portfolio/screens/home.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:portfolio/verification/verificationpage.dart'; // Custom verification page
+import 'package:portfolio/verification/verificationpage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,7 +13,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _pinController = TextEditingController(); // controls the text fields
+  final TextEditingController _pinController = TextEditingController();
   final TextEditingController _panController = TextEditingController();
 
   @override
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // Handle login process with MPIN and PAN
   Future<void> _handleLoginWithPin() async {
-    String enteredPan = _panController.text.trim(); 
+    String enteredPan = _panController.text.trim();
     String enteredPin = _pinController.text.trim();
 
     try {
@@ -48,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     } catch (e) {
-      print("Error during login: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login error: ${e.toString()}")),
       );
@@ -56,8 +56,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onLoginSuccess({required bool isFirstLogin}) async {
-    print("Login Successful!");
-
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
     await prefs.setBool('isExistingUser', true);
@@ -76,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
           await prefs.setBool('isFirstLogin', false);
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => const VerificationPage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           );
           return;
         } else {
@@ -120,13 +118,91 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Widget _buildLoginContent(bool isFirstLogin) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (isFirstLogin) ...[
+          _buildTextField(
+            controller: _panController,
+            labelText: 'Enter PAN',
+          ),
+          const SizedBox(height: 20),
+          _buildTextField(
+            controller: _pinController,
+            labelText: 'Enter MPIN',
+            isPassword: true,
+          ),
+          const SizedBox(height: 20),
+          _buildButton(
+            label: 'Login with PAN & MPIN',
+            onPressed: _handleLoginWithPin,
+          ),
+        ],
+        const SizedBox(height: 20),
+        if (!isFirstLogin) ...[
+         
+          _buildButton(
+            label: 'Login with Biometrics',
+            onPressed: _handleBiometricLogin,
+            
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    bool isPassword = false,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: isPassword,
+      keyboardType:
+          isPassword ? TextInputType.number : TextInputType.text,
+      decoration: InputDecoration(
+        labelText: labelText,
+        fillColor: Colors.white70,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton({
+    required String label,
+    required VoidCallback onPressed,
+  }) {
+    return TextButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white70,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+        elevation: 5,
+      
+      ),
+      child: Text(label, style: const TextStyle(color: Colors.black)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
       future: _checkIfFirstLogin(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
         }
         bool isFirstLogin = snapshot.data ?? true;
 
@@ -135,88 +211,23 @@ class _LoginPageState extends State<LoginPage> {
             title: const Text('Login'),
             backgroundColor: Colors.blue[50],
           ),
-          body: Stack(
-            children: [
-              // Background image stretched across the screen
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/images/main-image.jpg',
-                  fit: BoxFit.cover, // Ensures the image covers the entire screen
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/main-image.jpg'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: _buildLoginContent(isFirstLogin),
                 ),
               ),
-              // SafeArea to prevent the UI from overlapping with system UI like notches or the navigation bar
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (isFirstLogin) ...[
-                        TextField(
-                          controller: _panController,
-                          decoration: InputDecoration(
-                            labelText: 'Enter PAN',
-                            fillColor: Colors.white70,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        TextField(
-                          controller: _pinController,
-                          obscureText: true,
-                          maxLength: 4,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelText: 'Enter MPIN',
-                            fillColor: Colors.white70,
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _handleLoginWithPin,
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                            backgroundColor: Colors.white70,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-                            elevation: 5,
-                          ),
-                          child: const Text(
-                            'Login with PAN & MPIN',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 20),
-                      if (!isFirstLogin) ...[
-                        ElevatedButton(
-                          onPressed: _handleBiometricLogin,
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.black,
-                            backgroundColor: Colors.white10,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-                            elevation: 5,
-                          ),
-                          child: const Text('Login with Biometrics'),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

@@ -55,15 +55,19 @@ class DefaultFirebaseOptions {
     messagingSenderId: '111271853773',
     projectId: 'mutualfundmanage',
     storageBucket: 'mutualfundmanage.firebasestorage.app',
+    androidClientId: '111271853773-2a7sf15pjdjrss4laf2r193rnhtd41um.apps.googleusercontent.com',
+    iosClientId: '111271853773-ki8v952m2dkf3vsl4smsqbm1fg7d3bdr.apps.googleusercontent.com',
     iosBundleId: 'com.example.portfolio',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyD0--dzGa50GK07yzqxskzuM3m8l2eSelQ',
-    appId: '1:612442983122:ios:05a8c4b81aa8a5fbf83b0b',
-    messagingSenderId: '612442983122',
-    projectId: 'portfoliomanage-ba393',
-    storageBucket: 'portfoliomanage-ba393.firebasestorage.app',
+    apiKey: 'AIzaSyAwvqJzU8olhPasnlSh-Gy2w9WPHJAF5us',
+    appId: '1:111271853773:ios:50afb8d35d0229b1663384',
+    messagingSenderId: '111271853773',
+    projectId: 'mutualfundmanage',
+    storageBucket: 'mutualfundmanage.firebasestorage.app',
+    androidClientId: '111271853773-2a7sf15pjdjrss4laf2r193rnhtd41um.apps.googleusercontent.com',
+    iosClientId: '111271853773-ki8v952m2dkf3vsl4smsqbm1fg7d3bdr.apps.googleusercontent.com',
     iosBundleId: 'com.example.portfolio',
   );
 
