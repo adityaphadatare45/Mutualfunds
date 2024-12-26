@@ -7,7 +7,8 @@ import 'package:portfolio/verification/verificationpage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
+  // create a a class named loginpage which extends to stateful widget, which means it have mutable state.
+  // Super 
   @override
   _LoginPageState createState() => _LoginPageState();
 }

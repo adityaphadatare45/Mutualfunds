@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:portfolio/screens/Welcomescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:portfolio/main.dart'; // Ensure this path is correct
 
@@ -10,7 +11,6 @@ class HomePage extends StatelessWidget {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', false);  // Clear login state
     await prefs.setBool('isSignedIn', false);  // Clear sign-up state
-
     // Navigate to WelcomeScreen
     Navigator.pushReplacement(
       context,
