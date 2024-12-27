@@ -7,8 +7,8 @@ import 'package:portfolio/verification/verificationpage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-  // create a a class named loginpage which extends to stateful widget, which means it have mutable state.
-  // Super 
+  // create a a class named loginpage which extends to stateful widget, which means it have mutable state.[ Mutable state is a state that can be changed during the lifetime of a widget.]
+  // Super key is used to pass the key parameter to the parent class, In this case parent class is stateful widget.
   @override
   _LoginPageState createState() => _LoginPageState();// create a state object for the loginpage class.
 }
@@ -51,34 +51,34 @@ class _LoginPageState extends State<LoginPage> { //
       }
     } catch (e) {                                           // This code is used to handle teh exceptions.
       ScaffoldMessenger.of(context).showSnackBar(           // 
-        SnackBar(content: Text("Login error: ${e.toString()}")),// 
+        SnackBar(content: Text("Login error: ${e.toString()}")),// Snackbar shows the error message to the user.
       );
     }
   }
 
-  Future<void> _onLoginSuccess({required bool isFirstLogin}) async { // Future is used to represent a potential value or the error will exist in the future.
+  Future<void> _onLoginSuccess({required bool isFirstLogin}) async { // Future<void>: This indicates that the function is asynchronous and will eventually complete without returning a value.
     final prefs = await SharedPreferences.getInstance();             // Shared preference is used to store the data in the key value pair.
     await prefs.setBool('isLoggedIn', true);                         // It will set the value of the key to the shared preferences for users logging status.
     await prefs.setBool('isExistingUser', true);                     // It will set the value of the key to the shared preferences, if the user is existing user.
                                       
     if (isFirstLogin) {                                              // If the user is the first timer for login, then it will show the biometric authentication with mpin and pan login.
-      final LocalAuthentication auth = LocalAuthentication();       //
-      bool canCheckBiometrics = await auth.canCheckBiometrics;
+      final LocalAuthentication auth = LocalAuthentication();       // Local authentication is used to authenticate the user with the biometrics.
+      bool canCheckBiometrics = await auth.canCheckBiometrics;     //  This object will check the biometrics functionality of the device.
 
-      if (canCheckBiometrics) {
-        bool authenticated = await auth.authenticate(
-          localizedReason: 'Authenticate with biometrics to complete setup',
-          options: const AuthenticationOptions(biometricOnly: true),
+      if (canCheckBiometrics) {                                    // THis if condition checks, if the biometrics is available for authentication.
+        bool authenticated = await auth.authenticate(              // It will authenticate the user with the biometrics.
+          localizedReason: 'Authenticate with biometrics to login', // This line shows the reason for the use of the biometrics.
+          options: const AuthenticationOptions(biometricOnly: true),// 
         );
 
-        if (authenticated) {
-          await prefs.setBool('isFirstLogin', false);
-          Navigator.pushReplacement(
+        if (authenticated) {                                       // If the authentication succeds. then the user is no longer the first user 
+          await prefs.setBool('isFirstLogin', false);              // It will set the value of the key to the shared preferences, that the user is no longer the first time user.
+          Navigator.pushReplacement(                               // After authentication navigator will push the user to the home page.
             context,
             MaterialPageRoute(builder: (context) => const HomePage()),
           );
-          return;
-        } else {
+          return;                                                  
+        } else {                                                   // If the authentication fails, then it will show error message to the user.
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Fingerprint authentication failed")),
           );
@@ -86,33 +86,33 @@ class _LoginPageState extends State<LoginPage> { //
         }
       }
     }
-    Navigator.pushReplacement(
-      context,
+    Navigator.pushReplacement(                                     // If the user is not the first time user, then it will only show the biometric auth option for login and navigate 
+      context,                                                     // to homepage.
       MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 
-  Future<void> _handleBiometricLogin() async {
-    final LocalAuthentication auth = LocalAuthentication();
-    bool canCheckBiometrics = await auth.canCheckBiometrics;
+  Future<void> _handleBiometricLogin() async {                    // Future<void>: This indicates that the function is asynchronous and will eventually complete without returning a value.
+    final LocalAuthentication auth = LocalAuthentication();       // Local authentication is used to authenticate the user with the biometrics.
+    bool canCheckBiometrics = await auth.canCheckBiometrics;      // THis object will check the biometrics functionality is available for the device.
 
-    if (canCheckBiometrics) {
-      bool authenticated = await auth.authenticate(
-        localizedReason: 'Authenticate with biometrics',
-        options: const AuthenticationOptions(biometricOnly: true),
+    if (canCheckBiometrics) {                                     // If the biometrics authentication is available.
+      bool authenticated = await auth.authenticate(               // Then it will authenticate the user with the biometrics. 
+        localizedReason: 'Authenticate with biometrics',          // This line shows the reason for the use of the biometrics.
+        options: const AuthenticationOptions(biometricOnly: true),// 
       );
 
-      if (authenticated) {
-        Navigator.pushReplacement(
+      if (authenticated) {                                        // If the authentication is successful, then it will navigate the user to the home page.
+        Navigator.pushReplacement(                                
           context,
-          MaterialPageRoute(builder: (context) => const VerificationPage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
-      } else {
+      } else {                                                   // If the authentication fails, then it will show the error message to the user.
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Authentication failed")),
         );
       }
-    } else {
+    } else {                                                     //  
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Biometric authentication not available")),
       );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/Welcomescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:portfolio/main.dart'; // Ensure this path is correct
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
