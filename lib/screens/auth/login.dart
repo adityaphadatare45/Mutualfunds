@@ -10,59 +10,59 @@ class LoginPage extends StatefulWidget {
   // create a a class named loginpage which extends to stateful widget, which means it have mutable state.
   // Super 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();// create a state object for the loginpage class.
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _pinController = TextEditingController();
-  final TextEditingController _panController = TextEditingController();
+class _LoginPageState extends State<LoginPage> { // 
+  final TextEditingController _pinController = TextEditingController();// create a text editing controller for pin.
+  final TextEditingController _panController = TextEditingController();//  create a text editing controller for pan.
 
   @override
-  void dispose() {
-    _pinController.dispose();
-    _panController.dispose();
-    super.dispose();
+  void dispose() { // dispose method is called when the object is removed from the permanetly from the memory.
+    _pinController.dispose(); // it will dipose the pin controller.
+    _panController.dispose(); // it will dipose the pan controller.
+    super.dispose();// super.dispose is used to call the dispose method of the parent class.
   }
 
   // Check if the user is logging in for the first time
-  Future<bool> _checkIfFirstLogin() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isFirstLogin') ?? true;
+  Future<bool> _checkIfFirstLogin() async {              // Future is used to represent a potential value or the error will exist in the future.
+    final prefs = await SharedPreferences.getInstance(); // Shared preferences is used to store the data in the key value pair.
+    return prefs.getBool('isFirstLogin') ?? true;        //getbool is used to get the value of the key from the shared preferences.
   }
 
   // Handle login process with MPIN and PAN
-  Future<void> _handleLoginWithPin() async {
-    String enteredPan = _panController.text.trim();
-    String enteredPin = _pinController.text.trim();
+  Future<void> _handleLoginWithPin() async {   // Future is used to represent a potential value or the error will exist in the future.
+    String enteredPan = _panController.text.trim(); // it will get the text from the pan controller and remove the white spaces.
+    String enteredPin = _pinController.text.trim(); // it will get the text from the pin controller and remove the white spaces.
 
-    try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .where('pan', isEqualTo: enteredPan)
-          .where('mpin', isEqualTo: enteredPin)
+    try {                                                    // try block is used to enclose the code that might throw an exception and catch block is used to handle the exception.
+      final querySnapshot = await FirebaseFirestore.instance // It will get the instance of the firebase firestore.
+          .collection('users')                               // it will get the collection of the users.
+          .where('pan', isEqualTo: enteredPan)               // it will get the pan from the users collection.
+          .where('mpin', isEqualTo: enteredPin)              // it will get the mpin from the users collection.
           .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        _onLoginSuccess(isFirstLogin: true);
+      if (querySnapshot.docs.isNotEmpty) {                  // If the query snapshot is not empty, then it will show the on login success.
+        _onLoginSuccess(isFirstLogin: true);                // 
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Incorrect PAN or MPIN")),
+        ScaffoldMessenger.of(context).showSnackBar(         // Scaffold messengers are used to show the snackbars.
+          const SnackBar(content: Text("Incorrect PAN or MPIN")), // It will the snackbar with error message.
         );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login error: ${e.toString()}")),
+    } catch (e) {                                           // This code is used to handle teh exceptions.
+      ScaffoldMessenger.of(context).showSnackBar(           // 
+        SnackBar(content: Text("Login error: ${e.toString()}")),// 
       );
     }
   }
 
-  Future<void> _onLoginSuccess({required bool isFirstLogin}) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', true);
-    await prefs.setBool('isExistingUser', true);
-
-    if (isFirstLogin) {
-      final LocalAuthentication auth = LocalAuthentication();
+  Future<void> _onLoginSuccess({required bool isFirstLogin}) async { // Future is used to represent a potential value or the error will exist in the future.
+    final prefs = await SharedPreferences.getInstance();             // Shared preference is used to store the data in the key value pair.
+    await prefs.setBool('isLoggedIn', true);                         // It will set the value of the key to the shared preferences for users logging status.
+    await prefs.setBool('isExistingUser', true);                     // It will set the value of the key to the shared preferences, if the user is existing user.
+                                      
+    if (isFirstLogin) {                                              // If the user is the first timer for login, then it will show the biometric authentication with mpin and pan login.
+      final LocalAuthentication auth = LocalAuthentication();       //
       bool canCheckBiometrics = await auth.canCheckBiometrics;
 
       if (canCheckBiometrics) {
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const VerificationPage()),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 
