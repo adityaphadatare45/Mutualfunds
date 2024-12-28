@@ -3,12 +3,12 @@ import 'package:portfolio/screens/Welcomescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatelessWidget {         // Home page class
+  const HomePage({super.key});                   // Constructor
 
   // Logout function that clears login state and navigates to WelcomeScreen
-  Future<void> logout(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
+  Future<void> logout(BuildContext context) async {  // Logout function
+    final prefs = await SharedPreferences.getInstance(); // Get instance of SharedPreferences
     await prefs.setBool('isLoggedIn', false);  // Clear login state
     await prefs.setBool('isSignedIn', false);  // Clear sign-up state
     // Navigate to WelcomeScreen
@@ -19,7 +19,7 @@ class HomePage extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {      // Build function
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
