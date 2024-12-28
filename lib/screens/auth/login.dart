@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:portfolio/verification/verificationpage.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -112,41 +112,41 @@ class _LoginPageState extends State<LoginPage> { //
           const SnackBar(content: Text("Authentication failed")),
         );
       }
-    } else {                                                     //  
+    } else {                                                     // If the biometrics authentication is not available, then it will show the error message to the user.
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Biometric authentication not available")),
       );
     }
   }
 
-  Widget _buildLoginContent(bool isFirstLogin) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (isFirstLogin) ...[
-          _buildTextField(
-            controller: _panController,
-            labelText: 'Enter PAN',
+  Widget _buildLoginContent(bool isFirstLogin) {                // This method is used to build the login content for the user.
+    return Column(                                              // Column is used to arrange the children in a vertical sequence. 
+      mainAxisAlignment: MainAxisAlignment.center,              // Main axis alignment is used to align the children in the center of the main axis.
+      crossAxisAlignment: CrossAxisAlignment.stretch,           // Cross axis alignment is used to align the children in the center of the cross axis. 
+      children: [                                       // Children is used to display the widgets in the column.
+        if (isFirstLogin) ...[                          // If the user is the first time user, then it will show the verification page.
+          _buildTextField(                                      // This method is used to build the text field for the user.
+            controller: _panController,                         // It will get the pan controller.
+            labelText: 'Enter PAN',                             // It will show the label text to the user.
           ),
-          const SizedBox(height: 20),
-          _buildTextField(
-            controller: _pinController,
-            labelText: 'Enter MPIN',
-            isPassword: true,
+          const SizedBox(height: 20),                           // It will show the sized box with height 20.
+          _buildTextField(                                      // This method is used to build the text field for the user.
+            controller: _pinController,                         // It will get the pin controller.
+            labelText: 'Enter MPIN',                            // It will show the label text to the user.
+            isPassword: true,                                   // It will show the password in the text field.
           ),
-          const SizedBox(height: 20),
-          _buildButton(
-            label: 'Login with PAN & MPIN',
-            onPressed: _handleLoginWithPin,
+          const SizedBox(height: 20),                           // It will show the sized box with height 20.
+          _buildButton(                                         // This method is used to build the button for the user.
+            label: 'Login with PAN & MPIN',                     // It will show the label text to the user.
+            onPressed: _handleLoginWithPin,                     // It will handle the login with mpin and pan.
           ),
         ],
         const SizedBox(height: 20),
-        if (!isFirstLogin) ...[
-         
-          _buildButton(
-            label: 'Login with Biometrics',
-            onPressed: _handleBiometricLogin,
+        if (!isFirstLogin) ...[                         // If the user is not the first time user, then it will show the biometric authentication for the user.
+                                             
+          _buildButton(                                         // This method is used to build the button for the user.
+            label: 'Login with Biometrics',                     // It will show the label text to the user.
+            onPressed: _handleBiometricLogin,                   // It will handle the biometric login for the user.
             
           ),
         ],
@@ -154,12 +154,12 @@ class _LoginPageState extends State<LoginPage> { //
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String labelText,
-    bool isPassword = false,
+  Widget _buildTextField({                                     // This method is used to build the text field for the user.
+    required TextEditingController controller,                 // It will get the controller for the text field.
+    required String labelText,                                 // It will get the label text for the text field.
+    bool isPassword = false,                                   // It will show the password in the text field.
   }) {
-    return TextField(
+    return TextField(                                          // TextField is used to get the input from the user.
       controller: controller,
       obscureText: isPassword,
       keyboardType:
