@@ -160,27 +160,27 @@ class _LoginPageState extends State<LoginPage> { //
     bool isPassword = false,                                   // It will show the password in the text field.
   }) {
     return TextField(                                          // TextField is used to get the input from the user.
-      controller: controller,
-      obscureText: isPassword,
+      controller: controller,                                  // It will get the controller for the text field.
+      obscureText: isPassword,                                 // It will show the password in the text field.
       keyboardType:
-          isPassword ? TextInputType.number : TextInputType.text,
-      decoration: InputDecoration(
-        labelText: labelText,
-        fillColor: Colors.white70,
-        filled: true,
-        border: OutlineInputBorder(
+          isPassword ? TextInputType.number : TextInputType.text, // It will show the keyboard type for the text field.
+      decoration: InputDecoration(                                // It will show the decoration for the text field.
+        labelText: labelText,                                     // It will show the label text for the text field.
+        fillColor: Colors.white70,                              // It will show the color for the text field.
+        filled: true,                                            
+        border: OutlineInputBorder(                               // It will show the border for the text field.
           borderRadius: BorderRadius.circular(20.0),
         ),
       ),
     );
   }
 
-  Widget _buildButton({
-    required String label,
-    required VoidCallback onPressed,
+  Widget _buildButton({                                           // This method is used to build the button for the user.
+    required String label,                                        // It will get the label text for the button.
+    required VoidCallback onPressed,                              // It will get the on pressed function for the button.
   }) {
-    return TextButton(
-      onPressed: onPressed,
+    return TextButton(                                            // TextButton is used to create a button with text.
+      onPressed: onPressed,                                       // It will get the on pressed function for the button.
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black,
         backgroundColor: Colors.white70,
