@@ -45,9 +45,9 @@ class AuthWrapper extends StatefulWidget { //  AuthWrapper is a stateful widget,
   const AuthWrapper({super.key});          // the constructor initializes the widget. 
 
   @override
-  _AuthWrapperState createState() => _AuthWrapperState(); // Creates the mutable state for this widget at a given location in the tree. //=> is implicit return statement.
+  State<AuthWrapper> createState() => _AuthWrapperState(); // Creates the mutable state for this widget at a given location in the tree. //=> is implicit return statement.
 }
- // createState() does not accept any parameters and returns a new instance of the State class that belongs to the widget.
+ // createState() does not accept any parameters but it returns a new instance of the State class that belongs to the widget.
 
 class _AuthWrapperState extends State<AuthWrapper> { // The state for the authwrapper widget for managing the login status of the user.
   bool _isLoggedIn = false;                          // Variable to store the login status of the user .
@@ -83,7 +83,7 @@ class _AuthWrapperState extends State<AuthWrapper> { // The state for the authwr
     setState(() {                                       
       _isLoggedIn = isLoggedIn && currentUser != null; 
     });
-  } 
+  }
    // setstate notifies the framework that the internal state of the object has changed in a way that might impact the user interface in this build context.
    // currentUser != null; this checks if the user is logged in and the user is not null.
  
