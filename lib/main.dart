@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart'; // USed to authenticate the user.
+import 'package:firebase_auth/firebase_auth.dart'; // Used to authenticate the user.
 import 'package:firebase_core/firebase_core.dart'; // Used to fire base initialization. 
 import 'package:flutter/material.dart';            //Flutter have two main widgets material and cupertino.
                                                    // Material is used for android and cupertino is used for ios.
@@ -19,7 +19,7 @@ Future<void> main() async {                       // main entry point for app
  // Initializeapp initialize the firebase with the configuturation of the app , it is a await call so it ensure that firebase is fully initialized before moving to the next step
  // await tell that the following statement will return the future (await is keyword).
  // after firebase is initialized runapp is called to start the flutter app and load the main widget 
- // Flutter engine is handles all the heavy lifting of the app, like rendering, input events, and so we need to make sure it is fully initialized before we start using it.
+ // Flutter engine handles all the heavy lifting of the app, like rendering, input events, and so we need to make sure it is fully initialized before we start using it.
  // That's why we call WidgetsFlutterBinding.ensureInitialized() before initializing Firebase.
 
 class MyApp extends StatelessWidget {         

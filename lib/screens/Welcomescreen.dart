@@ -16,8 +16,8 @@ class WelcomeScreen extends StatelessWidget {
         backgroundColor: Colors.blue[50],
         elevation: 0,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
+      body: Container( // container is a widget that allows you to customize its child widget.
+        decoration: const BoxDecoration(// decoration is used to add background image to the container.
           image: DecorationImage(
             image: AssetImage('assets/images/main-image.jpg'),
             fit: BoxFit.cover,
