@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(                   // MaterialApp is a widget that defines the basic material design visual layout structure of the app.
       debugShowCheckedModeBanner: false,  // Debug banner is used to show the debug banner on the top right corner of the app.
       title: 'Mutual Funds',
-      theme: ThemeData(primarySwatch: Colors.blue
+      theme: ThemeData(primarySwatch: Colors.blue     // The theme of the app is set to blue color.
       ),
       home: const AuthWrapper(), // set authwrapper as the home page . 
       // Use AuthWrapper to handle login state / checks whether the user is logged in and redirects accordingly.
