@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart'; // Provides persist
 Future<void> main() async {                       // main entry point for app 
   WidgetsFlutterBinding. ensureInitialized(); 
   await Firebase.initializeApp();              
-     runApp(const MyApp());      
+     runApp( const MyApp());      
      }              
  // when we need to use fire base or other things we need the flutter engine be fully prepared 
  // initializes the framework before Firebase setup and returns the instance , 
@@ -21,12 +21,13 @@ Future<void> main() async {                       // main entry point for app
  // after firebase is initialized runapp is called to start the flutter app and load the main widget 
  // Flutter engine handles all the heavy lifting of the app, like rendering, input events, and so we need to make sure it is fully initialized before we start using it.
  // That's why we call WidgetsFlutterBinding.ensureInitialized() before initializing Firebase.
-
+  
 class MyApp extends StatelessWidget {         
   const MyApp({super.key});                  
- // Create a class named myapp that extends to stateless widget, which is immutacble and cannot be changed once it is build.
+ // Create a class named  myapp that extends to stateless widget, which is immutacble and cannot be changed once it is build.
  // Created a constructor named as myapp which is used to initialize the material app widget.
  // Super.key is used to call the constructor of the parent class.
+ // Super.key is used to pass the key parameter from a subclass to its superclass, specifically when defining a widget class.
  // Also super prevents the child class from overriding the parent class method.
  // Key is used to uniquely identify the widget in the widget tree.
   @override
