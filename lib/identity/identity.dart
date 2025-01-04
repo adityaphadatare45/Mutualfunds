@@ -63,7 +63,7 @@ class _IdentityPageState extends State<IdentityPage> {   //
       });
 
       final prefs = await SharedPreferences.getInstance(); // used to store simple data 
-      await prefs.setBool('isLoggedIn', true);             // saves the boolean value 
+      await prefs.setBool('isLoggedIn', true);             // saves the boolean value // Set the key value pair in shared preferences to indicate that the user is logged in.
 
       // Navigate to HomePage
       Navigator.pushReplacement(

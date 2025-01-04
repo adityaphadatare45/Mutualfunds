@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // fetch the users record to validate
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:local_auth/local_auth.dart';
+import 'package:local_auth/local_auth.dart';// Local authentication is used to authenticate the user with the biometrics.
 
 
 class LoginPage extends StatefulWidget {
@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();// create a state object for the loginpage class.
 }
 
-class _LoginPageState extends State<LoginPage> { // 
+class _LoginPageState extends State<LoginPage> { // create a state object for the loginpage class.
   final TextEditingController _pinController = TextEditingController();// create a text editing controller for pin.
   final TextEditingController _panController = TextEditingController();//  create a text editing controller for pan.
 
