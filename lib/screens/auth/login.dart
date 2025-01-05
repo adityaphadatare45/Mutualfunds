@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
           await prefs.setBool('isFirstLogin', false);              // It will set the value of the key to the shared preferences, that the user is no longer the first time user.
           Navigator.pushReplacement(                               // After authentication navigator will push the user to the home page.
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) =>  HomePage()),
           );
           return;                                                  
         } else {                                                   // If the authentication fails, then it will show error message to the user.
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
     }
     Navigator.pushReplacement(                                     // If the user is not the first time user, then it will only show the biometric auth option for login and navigate 
       context,                                                     // to homepage.
-      MaterialPageRoute(builder: (context) => const HomePage()),
+      MaterialPageRoute(builder: (context) =>  HomePage()),
     );
   }
 
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
       if (authenticated) {                                        // If the authentication is successful, then it will navigate the user to the home page.
         Navigator.pushReplacement(                                
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } else {                                                   // If the authentication fails, then it will show the error message to the user.
         ScaffoldMessenger.of(context).showSnackBar(
