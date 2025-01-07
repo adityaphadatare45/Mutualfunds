@@ -23,7 +23,7 @@ Future<void> main() async {                       // main entry point for app
  // That's why we call WidgetsFlutterBinding.ensureInitialized() before initializing Firebase.
   
 class MyApp extends StatelessWidget {         
-  const MyApp({super.key});                  
+  const MyApp({super.key});                   
  // Create a class named  myapp that extends to stateless widget, which is immutacble and cannot be changed once it is build.
  // Created a constructor named as myapp which is used to initialize the material app widget.
  // Super.key is used to call the constructor of the parent class.
