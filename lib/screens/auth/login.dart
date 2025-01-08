@@ -10,7 +10,7 @@ class LoginPage extends StatefulWidget {
   // create a a class named loginpage which extends to stateful widget, which means it have mutable state.[ Mutable state is a state that can be changed during the lifetime of a widget.]
   // Super key is used to pass the key parameter to the parent class, In this case parent class is stateful widget.
   @override
-  _LoginPageState createState() => _LoginPageState();// create a state object for the loginpage class.
+  State <LoginPage>createState() => _LoginPageState();// create a state object for the loginpage class.
 }
 
 class _LoginPageState extends State<LoginPage> { // create a state object for the loginpage class.
@@ -141,7 +141,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
             onPressed: _handleLoginWithPin,                     // It will handle the login with mpin and pan.
           ),
         ],
-        const SizedBox(height: 20),
+        const SizedBox(height: 200),
         if (!isFirstLogin) ...[                         // If the user is not the first time user, then it will show the biometric authentication for the user.
                                              
           _buildButton(                                         // This method is used to build the button for the user.
