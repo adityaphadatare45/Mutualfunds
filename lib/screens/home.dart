@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/Welcomescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:pie_chart/pie_chart.dart';
+// import 'package:pie_chart/pie_chart.dart';
 
 
 class HomePage extends StatelessWidget {         // Home page class

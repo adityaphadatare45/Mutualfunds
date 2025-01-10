@@ -59,7 +59,7 @@ class _AuthWrapperState extends State<AuthWrapper> { // The state for the authwr
   @override
   void initState() { // Initstate is called when the state object is created.
     super.initState(); // It initialize the parent class.
-    _checkLoginStatus(); 
+      _checkLoginStatus(); 
   }
   //The primary purpose of using initState() in this 
   //context is to set up any necessary initial state for your widget, 
