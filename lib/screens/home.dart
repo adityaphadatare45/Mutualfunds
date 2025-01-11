@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 
 class HomePage extends StatelessWidget {         // Home page class
-    HomePage({super.key});                   // Constructor
+    const HomePage({super.key});                   // Constructor
 
 
   final Map <String,double> dataMap = const{
