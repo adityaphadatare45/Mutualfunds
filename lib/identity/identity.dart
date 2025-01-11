@@ -53,8 +53,7 @@ class _IdentityPageState extends State<IdentityPage> {   //
       // Store user details in Firestore
       await FirebaseFirestore.instance.collection('users'). // stores the additional data to firestore under users with unique id to each user
         doc(userCredential.user?.uid).set({                 // uses the already created users unique id to save the additional info of that user under that unique id 
-        // 'email': _emailController.text.trim(),
-        'mobile': _mobileController.text.trim(),
+        'mobile': _mobileController.text.trim(),            
         'pan': _panController.text.trim(),
         'dob': _selectedDate?.toLocal().toString().split(' ')[0],
         'mpin': _pinController.text.trim(),
@@ -80,7 +79,7 @@ class _IdentityPageState extends State<IdentityPage> {   //
   
 
   // Handle form submission
-  void _handleSubmit() {     // validate the form inputs , if it is valid it calls the createuser method 
+  void _handleSubmit() {                         // validate the form inputs , if it is valid it calls the createuser method 
     if (_formKey.currentState!.validate()) {
       _createUser();
     }

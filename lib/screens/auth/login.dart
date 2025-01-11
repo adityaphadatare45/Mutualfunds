@@ -43,14 +43,14 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {                  // If the query snapshot is not empty, then it will show the on login success.
-        _onLoginSuccess(isFirstLogin: true);                // 
+        _onLoginSuccess(isFirstLogin: true);                
       } else {
         ScaffoldMessenger.of(context).showSnackBar(         // Scaffold messengers are used to show the snackbars.
           const SnackBar(content: Text("Incorrect PAN or MPIN")), // It will the snackbar with error message.
         );
       }
     } catch (e) {                                           // This code is used to handle teh exceptions.
-      ScaffoldMessenger.of(context).showSnackBar(           // 
+      ScaffoldMessenger.of(context).showSnackBar(           
         SnackBar(content: Text("Login error: ${e.toString()}")),// Snackbar shows the error message to the user.
       );
     }
@@ -62,13 +62,13 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
     await prefs.setBool('isExistingUser', true);                     // It will set the value of the key to the shared preferences, if the user is existing user.
                                       
     if (isFirstLogin) {                                              // If the user is the first timer for login, then it will show the biometric authentication with mpin and pan login.
-      final LocalAuthentication auth = LocalAuthentication();       // Local authentication is used to authenticate the user with the biometrics.
-      bool canCheckBiometrics = await auth.canCheckBiometrics;     //  This object will check the biometrics functionality of the device.
+      final LocalAuthentication auth = LocalAuthentication();        // Local authentication is used to authenticate the user with the biometrics.
+      bool canCheckBiometrics = await auth.canCheckBiometrics;       //  This object will check the biometrics functionality of the device.
 
-      if (canCheckBiometrics) {                                    // THis if condition checks, if the biometrics is available for authentication.
-        bool authenticated = await auth.authenticate(              // It will authenticate the user with the biometrics.
-          localizedReason: 'Authenticate with biometrics to login', // This line shows the reason for the use of the biometrics.
-          options: const AuthenticationOptions(biometricOnly: true),// 
+      if (canCheckBiometrics) {                                      // THis if condition checks, if the biometrics is available for authentication.
+        bool authenticated = await auth.authenticate(                // It will authenticate the user with the biometrics.
+          localizedReason: 'Authenticate with biometrics to login',  // This line shows the reason for the use of the biometrics.
+          options: const AuthenticationOptions(biometricOnly: true),  
         );
 
         if (authenticated) {                                       // If the authentication succeds. then the user is no longer the first user 
@@ -123,8 +123,8 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
     return Column(                                              // Column is used to arrange the children in a vertical sequence. 
       mainAxisAlignment: MainAxisAlignment.center,              // Main axis alignment is used to align the children in the center of the main axis.
       crossAxisAlignment: CrossAxisAlignment.stretch,           // Cross axis alignment is used to align the children in the center of the cross axis. 
-      children: [                                       // Children is used to display the widgets in the column.
-        if (isFirstLogin) ...[                          // If the user is the first time user, then it will show the verification page.
+      children: [                                               // Children is used to display the widgets in the column.
+        if (isFirstLogin) ...[                                  // If the user is the first time user, then it will show the verification page.
           _buildTextField(                                      // This method is used to build the text field for the user.
             controller: _panController,                         // It will get the pan controller.
             labelText: 'Enter PAN',                             // It will show the label text to the user.
@@ -142,7 +142,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
           ),
         ],
         const SizedBox(height: 200),
-        if (!isFirstLogin) ...[                         // If the user is not the first time user, then it will show the biometric authentication for the user.
+        if (!isFirstLogin) ...[                                 // If the user is not the first time user, then it will show the biometric authentication for the user.
                                              
           _buildButton(                                         // This method is used to build the button for the user.
             label: 'Login with Biometrics',                     // It will show the label text to the user.
@@ -196,18 +196,18 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {                             //
     return FutureBuilder<bool>(
-      future: _checkIfFirstLogin(),
+      future: _checkIfFirstLogin(),                                // future checks if login is users first login. 
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
+        if (snapshot.connectionState == ConnectionState.waiting) { // checks if future is still waiting state, if so displays a loading spinner.
+          return const Scaffold(                                   // future returns the scsffold.
             body: Center(child: CircularProgressIndicator()),
           );
         }
-        bool isFirstLogin = snapshot.data ?? true;
+        bool isFirstLogin = snapshot.data ?? true;                 // Retrives the resolved value of the future from snapdshot data , if snapshot data is null , defaults to true.
 
-        return Scaffold(
+        return Scaffold(                                           // 
           appBar: AppBar(
             title: const Text('Login'),
             backgroundColor: Colors.blue[50],
