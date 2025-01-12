@@ -142,8 +142,9 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
           ),
         ],
         const SizedBox(height: 200),
-        if (!isFirstLogin) ...[                                 // If the user is not the first time user, then it will show the biometric authentication for the user.
-                                             
+        if (!isFirstLogin) ...[                                   // If the user is not the first time user, then it will show the biometric authentication for the user.
+                                                                 // ...[] is known as spread oprator , In this operator if the given condition is true the widget is added to the ui
+                                                                 // if the condition is false then the block is skipped.
           _buildButton(                                         // This method is used to build the button for the user.
             label: 'Login with Biometrics',                     // It will show the label text to the user.
             onPressed: _handleBiometricLogin,                   // It will handle the biometric login for the user.
