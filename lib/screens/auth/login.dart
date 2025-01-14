@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
   State <LoginPage>createState() => _LoginPageState();// create a state object for the loginpage class.
 }
 
-class _LoginPageState extends State<LoginPage> { // create a state object for the loginpage class.
+class _LoginPageState extends State<LoginPage> { // create a state object for the loginpage class. 
   final TextEditingController _pinController = TextEditingController();// create a text editing controller for pin.
   final TextEditingController _panController = TextEditingController();//  create a text editing controller for pan.
 
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
     String enteredPan = _panController.text.trim(); // it will get the text from the pan controller and remove the white spaces.
     String enteredPin = _pinController.text.trim(); // it will get the text from the pin controller and remove the white spaces.
 
-    try {                                                    // try block is used to enclose the code that might throw an exception and catch block is used to handle the exception.
+    try {                                                           // try block is used to enclose the code that might throw an exception and catch block is used to handle the exception.
       final querySnapshot = await FirebaseFirestore.instance // It will get the instance of the firebase firestore.
           .collection('users')                               // it will get the collection of the users.
           .where('pan', isEqualTo: enteredPan)               // it will get the pan from the users collection.
