@@ -10,8 +10,8 @@ class WelcomeScreen extends StatelessWidget {
  // super.key is useful for state preservation and restoration.
   @override
   Widget build(BuildContext context) { // build method is called to render the widget on the screen.
-    return Scaffold(   // build method returns a scaffold widget which is a material design layout.
-      appBar: AppBar(
+    return Scaffold(   // build method returns a scaffold widget which is a material design layout. Scaffolds provide basic structure for ui building
+      appBar: AppBar(    
         title: const Text('Tri Funds'),// appbar is used to display the title of the app.
         backgroundColor: Colors.blue[50],
         elevation: 0,

@@ -82,14 +82,10 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Fingerprint authentication failed")),
           );
-          return;
+          return; 
         }
       }
     }
-    Navigator.pushReplacement(                                     // If the user is not the first time user, then it will only show the biometric auth option for login and navigate 
-      context,                                                     // to homepage.
-      MaterialPageRoute(builder: (context) =>  HomePage()),
-    );
   }
 
   Future<void> _handleBiometricLogin() async {                    // Future<void>: This indicates that the function is asynchronous and will eventually complete without returning a value.
@@ -198,7 +194,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
 
   @override
   Widget build(BuildContext context) {                             //
-    return FutureBuilder<bool>(
+    return FutureBuilder<bool>(                                    //Creates a widget that builds itself based on the latest snapshot of interaction with a [Future].
       future: _checkIfFirstLogin(),                                // future checks if login is users first login. 
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) { // checks if future is still waiting state, if so displays a loading spinner.
