@@ -1,12 +1,17 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart'; // fetch the users record to validate
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:local_auth/local_auth.dart';// Local authentication is used to authenticate the user with the biometrics.
+import 'package:local_auth/local_auth.dart';// Local authentication is used to authenticate the user with the local authentication.
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({super.key});    
   // create a a class named loginpage which extends to stateful widget, which means it have mutable state.[ Mutable state is a state that can be changed during the lifetime of a widget.]
   // Super key is used to pass the key parameter to the parent class, In this case parent class is stateful widget.
   @override
@@ -14,13 +19,16 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> { // create a state object for the loginpage class. 
-  final TextEditingController _pinController = TextEditingController();// create a text editing controller for pin.
-  final TextEditingController _panController = TextEditingController();//  create a text editing controller for pan.
+  final TextEditingController _userIdController = TextEditingController();// create a text editing controller for pin.
+  final TextEditingController _passwordController = TextEditingController();// create a text editing controller for pan.
+  final TextEditingController _otpController = TextEditingController();
+  bool _isOtpFieldVisible = false;
 
   @override
   void dispose() { // dispose method is called when the object is removed from the permanetly from the memory.
-    _pinController.dispose(); // it will dipose the pin controller.
-    _panController.dispose(); // it will dipose the pan controller.
+    _userIdController.dispose(); // it will dipose the pin controller.
+    _passwordController.dispose(); // it will dipose the pan controller.
+    _otpController.dispose();
     super.dispose();// super.dispose is used to call the dispose method of the parent class.
   }
 
@@ -32,26 +40,104 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
 
   // Handle login process with MPIN and PAN
   Future<void> _handleLoginWithPin() async {   // Future is used to represent a potential value or the error will exist in the future.
-    String enteredPan = _panController.text.trim(); // it will get the text from the pan controller and remove the white spaces.
-    String enteredPin = _pinController.text.trim(); // it will get the text from the pin controller and remove the white spaces.
+    String enteredPassword = _passwordController.text.trim(); // it will get the text from the pan controller and remove the white spaces.
+    String enteredUserID = _userIdController.text.trim(); // it will get the text from the pin controller and remove the white spaces.
 
-    try {                                                           // try block is used to enclose the code that might throw an exception and catch block is used to handle the exception.
+    /*try {                                                           // try block is used to enclose the code that might throw an exception and catch block is used to handle the exception.
       final querySnapshot = await FirebaseFirestore.instance // It will get the instance of the firebase firestore.
           .collection('users')                               // it will get the collection of the users.
           .where('pan', isEqualTo: enteredPan)               // it will get the pan from the users collection.
           .where('mpin', isEqualTo: enteredPin)              // it will get the mpin from the users collection.
           .get();
 
-      if (querySnapshot.docs.isNotEmpty) {                  // If the query snapshot is not empty, then it will show the on login success.
+      if (querySnapshot.docs.isNotEmpty) {                          // If the query snapshot is not empty, then it will show the on login success.
         _onLoginSuccess(isFirstLogin: true);                
       } else {
         ScaffoldMessenger.of(context).showSnackBar(         // Scaffold messengers are used to show the snackbars.
-          const SnackBar(content: Text("Incorrect PAN or MPIN")), // It will the snackbar with error message.
+          const SnackBar(content: Text("Incorrect Password or MPIN")), // It will the snackbar with error message.
         );
       }
     } catch (e) {                                           // This code is used to handle teh exceptions.
       ScaffoldMessenger.of(context).showSnackBar(           
         SnackBar(content: Text("Login error: ${e.toString()}")),// Snackbar shows the error message to the user.
+      );
+    }*/
+
+    
+    try {
+      final url = Uri.parse("http://192.168.3.105/api/core/users/LoginCheck");                   // Add url here 
+      final response = await http.post(
+        url,
+        headers: {                                 // Specifies what kind of content being used 
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'userId':enteredUserID,
+          'password':enteredPassword,
+        }),
+      ).timeout(Duration(seconds: 5), onTimeout:(){
+        throw TimeoutException('The connection timed out');
+      });
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success']) {
+          setState(() {
+            _isOtpFieldVisible = true; // Show OTP field on successful OTP send
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("OTP sent to your registered mobile number.")),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(data['message'] ?? "Failed to send OTP")),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Server error: ${response.statusCode}")),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error sending OTP: ${e.toString()}")),
+      );
+    }
+  }
+
+  Future<void> _verifyOtp() async {
+    String enteredOtp = _otpController.text.trim();
+
+    try {
+      final url = Uri.parse("http://192.168.3.105/api/core/otplog/InsertOtplogs");
+      final response = await http.post(
+        url,
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+         'otp' : enteredOtp,
+        }),
+        );
+
+        if (response.statusCode == 200) {
+          final data = jsonDecode(response.body);
+
+          if (data['Success']) {
+            _onLoginSuccess(isFirstLogin: false);
+          }else{
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(data['Message'] ?? 'Invalid OTP')),
+            );
+          }
+        }else {
+          ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(content: Text('Server Error ${response.statusCode}'))
+          );
+        }
+    } catch (e) {
+       ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error verifying OTP: ${e.toString()}")),
       );
     }
   }
@@ -122,22 +208,38 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
       children: [                                               // Children is used to display the widgets in the column.
         if (isFirstLogin) ...[                                  // If the user is the first time user, then it will show the verification page.
           _buildTextField(                                      // This method is used to build the text field for the user.
-            controller: _panController,                         // It will get the pan controller.
-            labelText: 'Enter PAN',                             // It will show the label text to the user.
+            controller: _userIdController,                         // It will get the pan controller.
+            labelText: 'Enter UserId',                             // It will show the label text to the user.
           ),
           const SizedBox(height: 20),                           // It will show the sized box with height 20.
           _buildTextField(                                      // This method is used to build the text field for the user.
-            controller: _pinController,                         // It will get the pin controller.
-            labelText: 'Enter MPIN',                            // It will show the label text to the user.
-            isPassword: true,                                   // It will show the password in the text field.
+            controller: _passwordController,                         // It will get the pan controller.
+            labelText: 'Enter Password',                             // It will show the label text to the user.
           ),
-          const SizedBox(height: 20),                           // It will show the sized box with height 20.
+
+          if(_isOtpFieldVisible)...[
+            const SizedBox(height: 20),
+            _buildTextField(
+              controller: _otpController,
+               labelText: 'Enter Otp'
+               ),
+            
+            const SizedBox(height: 20,),
+
+            _buildButton(
+              label: 'Login', 
+              onPressed: _verifyOtp,
+            ),
+          ],
+          const SizedBox(height: 450),                           // It will show the sized box with height 20.
           _buildButton(                                         // This method is used to build the button for the user.
-            label: 'Login with PAN & MPIN',                     // It will show the label text to the user.
+            label: 'Send Otp',                     // It will show the label text to the user.
             onPressed: _handleLoginWithPin,                     // It will handle the login with mpin and pan.
           ),
+          
         ],
-        const SizedBox(height: 200),
+        
+        const SizedBox(height: 900),
         if (!isFirstLogin) ...[                                   // If the user is not the first time user, then it will show the biometric authentication for the user.
                                                                  // ...[] is known as spread oprator , In this operator if the given condition is true the widget is added to the ui
                                                                  // if the condition is false then the block is skipped.
