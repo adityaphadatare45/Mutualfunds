@@ -1,6 +1,5 @@
 import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart'; // fetch the users record to validate
+// fetch the users record to validate
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';

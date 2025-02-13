@@ -71,8 +71,8 @@ class _AuthWrapperState extends State<AuthWrapper> { // The state for the authwr
     final prefs = await SharedPreferences.getInstance(); 
    // final keyword is useful for runtime initialization of variable values, which can be done only once. 
    // this async function is used to retrive the shared preference instance in key value pairs to persistent storage.
-
-    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+ 
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;  
     // retrive the value associated with the key , if the key isn't found the default value is false 
     // prefs.getBool('isLoggedIn') this line is used to obtain the value of the key which is associated with 'isLoggedIn'.
     // This key is typically set when the user logs in or log out from the app.

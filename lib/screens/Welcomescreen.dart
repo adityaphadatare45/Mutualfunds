@@ -56,12 +56,12 @@ class WelcomeScreen extends StatelessWidget {
                 child: const Text('Login', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(height: 25),
-              /*const Text(
+              const Text(
                 'OR',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),*/
+              const SizedBox(height: 20),
              
             ],// children
           ),
