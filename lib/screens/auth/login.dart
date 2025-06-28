@@ -1,9 +1,9 @@
-import 'dart:async';
+/*import 'dart:async';
 // fetch the users record to validate
 import 'package:flutter/material.dart';
 import 'package:portfolio/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:local_auth/local_auth.dart';// Local authentication is used to authenticate the user with the local authentication.
+import 'package:local_auth/local_auth.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'userId':enteredUserID,
+          'username':enteredUserID,
           'password':enteredPassword,
         }),
       ).timeout(Duration(seconds: 5), onTimeout:(){
@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        if (data['success']) {
+        if (data['Success']) {
           setState(() {
             _isOtpFieldVisible = true; // Show OTP field on successful OTP send
           });
@@ -100,46 +100,34 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error sending OTP: ${e.toString()}")),
+  /*      const String hardcodedUserId = "admin";
+  const String hardcodedPassword = "password123";
+
+  if (enteredUserID == hardcodedUserId && enteredPassword == hardcodedPassword) {
+    // Navigate to OTP screen if credentials are correct
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OtpScreen()), // Replace with your OTP screen
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Invalid User ID or Password")),*/
       );
     }
   }
 
-  Future<void> _verifyOtp() async {
-    String enteredOtp = _otpController.text.trim();
+ Future<void> _verifyOtp() async {
+  String enteredOtp = _otpController.text.trim();
+  const String hardcodedOtp = "1234"; // Hardcoded OTP
 
-    try {
-      final url = Uri.parse("http://192.168.3.105/api/core/otplog/InsertOtplogs");
-      final response = await http.post(
-        url,
-        headers:{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-         'otp' : enteredOtp,
-        }),
-        );
-
-        if (response.statusCode == 200) {
-          final data = jsonDecode(response.body);
-
-          if (data['Success']) {
-            _onLoginSuccess(isFirstLogin: false);
-          }else{
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(data['Message'] ?? 'Invalid OTP')),
-            );
-          }
-        }else {
-          ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text('Server Error ${response.statusCode}'))
-          );
-        }
-    } catch (e) {
-       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error verifying OTP: ${e.toString()}")),
-      );
-    }
+  if (enteredOtp == hardcodedOtp) {
+    _onLoginSuccess(isFirstLogin: false);
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Invalid OTP, please try again.")),
+    );
   }
+}
 
   Future<void> _onLoginSuccess({required bool isFirstLogin}) async { // Future<void>: This indicates that the function is asynchronous and will eventually complete without returning a value.
     final prefs = await SharedPreferences.getInstance();             // Shared preference is used to store the data in the key value pair.
@@ -160,9 +148,9 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
           await prefs.setBool('isFirstLogin', false);              // It will set the value of the key to the shared preferences, that the user is no longer the first time user.
           Navigator.pushReplacement(                               // After authentication navigator will push the user to the home page.
             context,
-            MaterialPageRoute(builder: (context) =>  HomePage()),
+            MaterialPageRoute(builder: (context) =>  HomePage(token: '',)),
           );
-          return;                                                  
+          return;                                                   
         } else {                                                   // If the authentication fails, then it will show error message to the user.
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Fingerprint authentication failed")),
@@ -297,7 +285,7 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
   Widget build(BuildContext context) {                             //
     return FutureBuilder<bool>(                                    //Creates a widget that builds itself based on the latest snapshot of interaction with a [Future].
       future: _checkIfFirstLogin(),                                // future checks if login is users first login. 
-      builder: (context, snapshot) {
+      builder: (context, snapshot) { 
         if (snapshot.connectionState == ConnectionState.waiting) { // checks if future is still waiting state, if so displays a loading spinner.
           return const Scaffold(                                   // future returns the scsffold.
             body: Center(child: CircularProgressIndicator()),
@@ -332,4 +320,4 @@ class _LoginPageState extends State<LoginPage> { // create a state object for th
       },
     );
   }
-}
+}*/

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:portfolio/identity/identity.dart';
-import 'package:portfolio/screens/auth/login.dart';
+import 'package:mobileOs/screens/identity/identity.dart';
+import 'package:mobileOs/screens/identity/panverification.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -11,10 +11,14 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) { // build method is called to render the widget on the screen.
     return Scaffold(   // build method returns a scaffold widget which is a material design layout. Scaffolds provide basic structure for ui building
-      appBar: AppBar(    
-        title: const Text('Tri Funds'),// appbar is used to display the title of the app.
-        backgroundColor: Colors.blue[50],
-        elevation: 0,
+       appBar: AppBar(
+       backgroundColor: Colors.blue[50],
+       elevation: 0,
+       centerTitle: true, // Ensures center alignment on Android too
+       title: Image.asset(
+          'assets/icon/AS1.png',
+          height: 32, // Adjust as neede
+        ),
       ),
       body: Container( // container is a widget that allows you to customize its child widget.
         decoration: const BoxDecoration(// decoration is used to add background image to the container.
@@ -28,7 +32,7 @@ class WelcomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Welcome to Tri Funds',
+                'Welcome to MobileOS',
                 style: TextStyle(fontSize: 24,
                              fontWeight: FontWeight.bold,
                              color: Colors.white),
@@ -36,7 +40,12 @@ class WelcomeScreen extends StatelessWidget {
                  ),  
               const SizedBox(height: 40),
 
-              ElevatedButton(
+              ElevatedButton(                
+                     style: ElevatedButton.styleFrom(
+                     backgroundColor: Colors.white.withOpacity(0.8),
+                     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -47,21 +56,26 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                 style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white.withOpacity(0.8),
+                  padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  ),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    MaterialPageRoute(builder: (context) => const PANPage()),
                   );
                 },
                 child: const Text('Login', style: TextStyle(color: Colors.black)),
               ),
               const SizedBox(height: 25),
-              const Text(
+              /*const Text(
                 'OR',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 20),*/
              
             ],// children
           ),

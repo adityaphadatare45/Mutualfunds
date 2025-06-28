@@ -7,6 +7,42 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:111271853773:android:34890aea3e6650d3663384",
+        "android_client_info": {
+          "package_name": "com.anantsoft.mobileOs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "111271853773-sn5gv87c6h1i4tdiggle7dmc4fd7vnk5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZNdn7x5YXZqFlCkNDG_QtxdOgDr0NJks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "111271853773-sn5gv87c6h1i4tdiggle7dmc4fd7vnk5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "111271853773-ki8v952m2dkf3vsl4smsqbm1fg7d3bdr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.portfolio"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:111271853773:android:0b5e630555058756663384",
         "android_client_info": {
           "package_name": "com.example.portfolio"

@@ -1,16 +1,18 @@
 import 'package:firebase_auth/firebase_auth.dart'; // Used to authenticate the user.
-import 'package:firebase_core/firebase_core.dart'; // Used to fire base initialization. 
+// Used to fire base initialization. 
 import 'package:flutter/material.dart';            //Flutter have two main widgets material and cupertino.
-                                                   // Material is used for android and cupertino is used for ios.
-import 'package:portfolio/screens/home.dart';
-import 'screens/Welcomescreen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mobileOs/screens/Welcomescreen.dart';                                                 // Material is used for android and cupertino is used for ios.
+import 'package:mobileOs/screens/home.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Provides persistent storage for simple data in key-value pairs.
 
 
 Future<void> main() async {                       // main entry point for app 
-  WidgetsFlutterBinding. ensureInitialized(); 
-  await Firebase.initializeApp();              
-     runApp( const MyApp());      
+  //WidgetsFlutterBinding. ensureInitialized(); 
+  //await Firebase.initializeApp();              
+    final start = DateTime.now();
+     runApp( const MyApp());     
+      debugPrint('App started in ${DateTime.now().difference(start).inMilliseconds} ms'); 
      }              
  // when we need to use fire base or other things we need the flutter engine be fully prepared 
  // initializes the framework before Firebase setup and returns the instance , 
@@ -36,9 +38,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(                   // MaterialApp is a widget that defines the basic material design visual layout structure of the app.
       debugShowCheckedModeBanner: false,  // Debug banner is used to show the debug banner on the top right corner of the app.
       title: 'Mutual Funds',
-      theme: ThemeData(primarySwatch: Colors.blue     // The theme of the app is set to blue color.
+      theme: ThemeData(primarySwatch: Colors.blue    // The theme of the app is set to blue color.
       ),
-      home: const AuthWrapper(), // set authwrapper as the home page . 
+      home: const WelcomeScreen(), // set authwrapper as the home page . 
+      //home: const Splashscreen(),
       // Use AuthWrapper to handle login state / checks whether the user is logged in and redirects accordingly.
     );   
   }
@@ -59,7 +62,7 @@ class _AuthWrapperState extends State<AuthWrapper> { // The state for the authwr
   @override
   void initState() { // Initstate is called when the state object is created.
     super.initState(); // It initialize the parent class.
-      _checkLoginStatus(); 
+      _initializeLoginStatus(); 
   }
   //The primary purpose of using initState() in this 
   //context is to set up any necessary initial state for your widget, 
@@ -67,7 +70,7 @@ class _AuthWrapperState extends State<AuthWrapper> { // The state for the authwr
 
 
   // Check if the user is logged in
-  Future<void> _checkLoginStatus() async {  // sees the shared preference to retrieve the login status from the persistent storage 
+  Future<void> _initializeLoginStatus() async {  // Renamed to avoid conflict with the other method.
     final prefs = await SharedPreferences.getInstance(); 
    // final keyword is useful for runtime initialization of variable values, which can be done only once. 
    // this async function is used to retrive the shared preference instance in key value pairs to persistent storage.
@@ -91,15 +94,33 @@ class _AuthWrapperState extends State<AuthWrapper> { // The state for the authwr
    // currentUser != null; this checks if the user is logged in and the user is not null.
  
   @override
-  Widget build(BuildContext context) {
-    // Wait for the login status to be checked before building the UI
-    if (!_isLoggedIn) {
-      // If not logged in, show the WelcomeScreen
-      return const WelcomeScreen();
-    } else {
-      // If logged in , show the home screen 
-      return HomePage();
-    }
-  }
+Widget build(BuildContext context) {
+  return FutureBuilder<Map<String, dynamic>>(
+    future: _checkLoginStatus(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      final isLoggedIn = snapshot.data?['isLoggedIn'] ?? false;
+      final token = snapshot.data?['token'] ?? '';
+
+      if (isLoggedIn && token.isNotEmpty) {
+        return HomePage(token: token);
+      } else {
+        return const WelcomeScreen();
+      }
+    },
+  );
+}
+
+Future<Map<String, dynamic>> _checkLoginStatus() async {
+  final prefs = await SharedPreferences.getInstance();
+  final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  final storage = const FlutterSecureStorage();
+  final token = await storage.read(key: 'jwttoken');
+  return {'isLoggedIn': isLoggedIn, 'token': token};
+}
+
 }
 
