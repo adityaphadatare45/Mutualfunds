@@ -36,7 +36,7 @@ class _SplashscreenState extends State<Splashscreen> {
   Future<void> _checkSecurity() async {
     bool isRooted = await JailbreakRootDetection.instance.isJailBroken;
     bool isUsbDebugging = await UsbDebugChecker.isUsbDebuggingEnabled();
-    bool isDevMode = false; // or use another plugin if you need dev mode detection
+    // bool isDevMode = false; // or use another plugin if you need dev mode detection
 
     //bool isDevMode = await FlutterJailbreakDetection.developerMode;
 
