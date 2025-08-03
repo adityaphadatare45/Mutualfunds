@@ -69,28 +69,41 @@ class _NewpurchaseState extends State<Newpurchase>{
                   labelText: 'Email belongs to *'
                 ),
                 items: ['Self', 'Spouse', 'Dependent Children', 'Dependent Sibling', 'Dependent Parent', 'Gaurdian']
-                .map((val) => DropdownMenuItem(value: val, child: Text('Select Relationship')))
+                .map((val) => DropdownMenuItem(value: val, child: Text(val)))
                 .toList(),
                 onChanged:(val) => setState(() => _relationshipEmail = val),
                 validator: (value) => value == null ? 'Required' : null,
               ),
               const SizedBox(height: 10),
 
-              // Mobile and country code
-
-              Row(
+            // Mobile and country code
+             Row(
                 children: [
                   Expanded(
                     flex: 2,
                     child: DropdownButtonFormField<String>(
-                      items: [], 
-                      onChanged:(val) => setState(() => _countryCode = val ),
-                      
-                    )
-                  ), 
-
+                      decoration: InputDecoration(labelText: 'Country Code *'),
+                      items: ['+91', '+1', '+44']
+                          .map((val) => DropdownMenuItem(value: val, child: Text(val)))
+                          .toList(),
+                      onChanged: (val) => setState(() => _countryCode = val),
+                      validator: (value) => value == null ? 'Required' : null,
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    flex: 5,
+                    child: TextFormField(
+                      decoration: InputDecoration(labelText: 'Mobile Number *'),
+                      keyboardType: TextInputType.phone,
+                      validator: (val) =>
+                          val != null && val.length == 10 ? null : 'Enter valid number',
+                    ),
+                  ),
                 ],
-              )
+              ),
+              const SizedBox(height:10),
+
             ],
           )
         ),
