@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Newpurchase extends StatefulWidget{
   const Newpurchase({super.key});
@@ -16,6 +17,8 @@ class _NewpurchaseState extends State<Newpurchase>{
   String? _countryCode;
   DateTime? _dob;
   final TextEditingController _dobController = TextEditingController();
+
+  
 
   @override
  Widget build(BuildContext context){
@@ -104,10 +107,56 @@ class _NewpurchaseState extends State<Newpurchase>{
               ),
               const SizedBox(height:10),
 
+              // Mobile Relationship
+              TextFormField(
+                controller: _dobController,
+                decoration: InputDecoration(
+                    labelText: 'Date of Birth *',
+                    suffixIcon: Icon(Icons.calendar_today)),
+                readOnly: true,
+                onTap: _selectdob,
+                validator: (val) => val == null || val.isEmpty ? 'Select DOB' : null,
+              ),
+              const SizedBox(height: 10),
+              
+              // Checkbox
+              CheckboxListTile(
+                title: Text("I hereby confirm I am not a U.S. or restricted person"),
+                value: false,
+                onChanged: (val) {}, // Add logic here
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
+
+              SizedBox(height: 20),
+
+              // Submit Button
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Form Submitted Successfully')));
+                  }
+                },
+                child: Text('Submit'),
+              )
             ],
           )
         ),
       )
     );
   }
+  Future<void> _selectdob() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000),
+      firstDate: DateTime(1950),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _dob = picked;
+        _dobController.text = DateFormat('dd/MM/yyyy').format(picked);
+      });
+  }
+ }
 }

@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       title: 'Mutual Funds',
       theme: ThemeData(primarySwatch: Colors.blue    // The theme of the app is set to blue color.
       ),
-      home: const Newpurchase(), // set authwrapper as the home page . 
+      home: const WelcomeScreen(), // set authwrapper as the home page . 
       //home: const Splashscreen(),
       // Use AuthWrapper to handle login state / checks whether the user is logged in and redirects accordingly.
     );   

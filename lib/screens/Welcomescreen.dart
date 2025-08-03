@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobileOs/screens/identity/identity.dart';
+// import 'package:mobileOs/screens/identity/identity.dart';
+import 'package:mobileOs/screens/identity/newpurchase.dart';
 import 'package:mobileOs/screens/identity/panverification.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class WelcomeScreen extends StatelessWidget {
   Widget build(BuildContext context) { // build method is called to render the widget on the screen.
     return Scaffold(   // build method returns a scaffold widget which is a material design layout. Scaffolds provide basic structure for ui building
        appBar: AppBar(
-       backgroundColor: Colors.blue[50],
+       backgroundColor: const Color.fromARGB(255, 48, 138, 194),
        elevation: 0,
        centerTitle: true, // Ensures center alignment on Android too
        title: Image.asset(
@@ -33,10 +34,11 @@ class WelcomeScreen extends StatelessWidget {
             children: [
               const Text(
                 'Welcome to MobileOS',
-                style: TextStyle(fontSize: 24,
-                             fontWeight: FontWeight.bold,
-                             color: Colors.white),
-                             textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white),
+                  textAlign: TextAlign.center,
                  ),  
               const SizedBox(height: 40),
 
@@ -49,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const IdentityPage()),
+                    MaterialPageRoute(builder: (context) => const Newpurchase()),
                   );
                 },
                 child: const Text('Sign Up', style: TextStyle(color: Colors.black)),
