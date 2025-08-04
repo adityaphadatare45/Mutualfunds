@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const Newpurchase()),
+                    MaterialPageRoute(builder: (context) => const NewPurchase()),
                   );
                 },
                 child: const Text('Sign Up', style: TextStyle(color: Colors.black)),
