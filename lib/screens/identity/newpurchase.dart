@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobileOs/screens/identity/personaldetails.dart';
 
 class NewPurchase extends StatefulWidget {
   const NewPurchase({super.key});
@@ -151,6 +152,12 @@ class _NewPurchaseState extends State<NewPurchase> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('OTP Verified')),
                       );
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Personaldetails(), 
+                      ),
+                    );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Invalid OTP')),
@@ -162,7 +169,9 @@ class _NewPurchaseState extends State<NewPurchase> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                     padding: const EdgeInsets.symmetric(vertical: 12),
+                    
                   ),
+                  
                 ),
               ],
             ],
