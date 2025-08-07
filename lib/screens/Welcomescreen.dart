@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:mobileOs/screens/identity/identity.dart';
-import 'package:mobileOs/screens/identity/newpurchase.dart';
+import 'package:mobileOs/screens/info/newpurchase.dart';
 import 'package:mobileOs/screens/identity/panverification.dart';
 
 class WelcomeScreen extends StatelessWidget {

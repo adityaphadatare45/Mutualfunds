@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';            //Flutter have two main widge
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobileOs/screens/Welcomescreen.dart';                                                 // Material is used for android and cupertino is used for ios.
 import 'package:mobileOs/screens/home.dart';
-import 'package:mobileOs/screens/identity/newpurchase.dart';
+import 'package:mobileOs/screens/info/newpurchase.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Provides persistent storage for simple data in key-value pairs.
 
 

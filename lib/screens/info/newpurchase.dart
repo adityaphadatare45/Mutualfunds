@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobileOs/screens/identity/personaldetails.dart';
+import 'package:mobileOs/screens/info/personaldetails.dart';
 
 class NewPurchase extends StatefulWidget {
   const NewPurchase({super.key});
