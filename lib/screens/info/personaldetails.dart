@@ -13,7 +13,14 @@ class _PersonaldetailsPage extends State<Personaldetails>{
 
    final _nameController = TextEditingController();
    String? value; // Variable to hold the selected dropdown value
+   String? occupation;
    final List<String> items = ['Single', 'Joint', 'Either or Survivor']; // Dropdown items
+   final List<String> occupationOptions = ['Student', 'Public sector service', 'Private sector service', 'Self Employed', 'Business', 'Not categorised', 'Others'];
+   final List<String> income = [' Below 100000', '100000 to 500000', '5 lakhs to 10 lakhs', '10 lakhs to 25 lakhs', '25 lakhs to 1 crore' 'Above 1 crore'];
+   final List<String> countries = ['India', 'US', 'Other'];
+   final List<String> citizenship = ['India', 'US', 'Other'];
+
+ 
 
   @override
   Widget build(BuildContext context){
@@ -42,7 +49,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
             label: Text('Full Name of Invester as per PAN *',
             style: TextStyle(
                fontSize: 24,
-               color: Colors.white,
+               color: Colors.black,
             ),
             ),
            ),
@@ -71,6 +78,37 @@ class _PersonaldetailsPage extends State<Personaldetails>{
           const SizedBox(height: 10),
 
           // Occupation drop dowm.
+          DropdownButtonFormField<String>(
+               value: occupation,
+               decoration: const InputDecoration(
+               labelText: 'Occupation',
+               border: OutlineInputBorder(),
+              ),
+              items: occupationOptions.map((item) => DropdownMenuItem(
+              value: item,
+              child: Text(item),
+               )).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                 occupation = newValue;
+                    });
+                  },
+              ),
+          
+          const SizedBox(height: 10),
+          // Annual Income dropdowm.
+         /* DropdownButtonFormField<String>(
+            items: items, 
+            onChanged: onChanged
+            ),*/
+        
+          // Income text input field.
+
+          /// Regulatory details.
+          // Country of birth.
+          // Country of citizenship/ Nationality
+          // Tax resident other than India 
+
          ], 
         )
       ), 

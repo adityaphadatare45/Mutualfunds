@@ -29,12 +29,12 @@ class Investmentdetails extends StatefulWidget{
         key: _formKey,
         child: ListView(
            children: [
-            _buildDropdown(
+           /* _buildDropdown(
               label: 'The Plan',
               value: _plantype, 
               items: [], 
               onChanged: onChanged
-            )
+            )*/
            ],
         )
         ),
