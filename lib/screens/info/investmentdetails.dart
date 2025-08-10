@@ -19,7 +19,6 @@ class Investmentdetails extends StatefulWidget{
       title: const Text('Investment Details',
       style: TextStyle(
         fontSize: 24,
-
       ),
       ),
      ),

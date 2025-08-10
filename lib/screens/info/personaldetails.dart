@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobileOs/screens/info/nomineedetails.dart';
 
 class Personaldetails extends StatefulWidget{
   const Personaldetails({super.key});
@@ -13,11 +14,22 @@ class _PersonaldetailsPage extends State<Personaldetails>{
 
    final _nameController = TextEditingController();
    final _annualIncomeController = TextEditingController();
-   String? value; // Variable to hold the selected dropdown value
-   String? occupation;
+   
+   // Variable to hold the selected dropdown value
+   String? _value; 
+   String? _occupation;
+   String? _citizenship;
+   String? _birthCountry;
+   String? _annualIncome;
+
+   // Check box state.
+   bool? _yesCheck;
+   bool? _noCheck;
+
+   // List for selection
    final List<String> holding = ['Single', 'Joint', 'Either or Survivor']; // Dropdown items
    final List<String> occupationOptions = ['Student', 'Public sector service', 'Private sector service', 'Self Employed', 'Business', 'Not categorised', 'Others'];
-   final List<String> income = [' Below 100000', '100000 to 500000', '5 lakhs to 10 lakhs', '10 lakhs to 25 lakhs', '25 lakhs to 1 crore', 'Above 1 crore'];
+   final List<String> income = [' Below 100000', '1 lakh to 5 lakh', '5 lakhs to 10 lakhs', '10 lakhs to 25 lakhs', '25 lakhs to 1 crore', 'Above 1 crore'];
    final List<String> countries = ['India', 'US', 'Other'];
    final List<String> citizenship = ['India', 'US', 'Other'];
 
@@ -53,7 +65,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
           
           // Mode of holding drop down
           DropdownButtonFormField(
-            value: value,
+            value: _value,
             decoration: InputDecoration(
               labelText: 'Mode of Holding',
               border: OutlineInputBorder(),
@@ -64,7 +76,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
             )).toList(),
             onChanged: (newValue) {
               setState(() {
-                value = newValue;
+                _value = newValue;
               });
             },
           ),
@@ -73,7 +85,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
 
           // Occupation drop dowm.
           DropdownButtonFormField<String>(
-               value: occupation,
+               value: _occupation,
                decoration: const InputDecoration(
                labelText: 'Occupation',
                border: OutlineInputBorder(),
@@ -84,7 +96,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
                )).toList(),
                 onChanged: (newValue) {
                   setState(() {
-                 occupation = newValue;
+                 _occupation = newValue;
                     });
                   },
               ),
@@ -92,7 +104,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
           const SizedBox(height: 10),
           // Annual Income dropdowm.
           DropdownButtonFormField<String>(
-            value: income.isNotEmpty ? income.first : null,
+            value: _annualIncome,
             decoration: const InputDecoration(
               labelText: 'Annual Income',
               border: OutlineInputBorder(),
@@ -103,7 +115,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
             )).toList(),
             onChanged: (newValue) {
               setState(() {
-                // Update the selected income value
+                _annualIncome = newValue;
               });
             },
           ),
@@ -125,19 +137,71 @@ class _PersonaldetailsPage extends State<Personaldetails>{
             ),
             const SizedBox(height: 10),
           // Country of birth.
-        /*  _buildDropdown(
-            label: label, 
-            value: value, 
-            items: items, 
-            onChanged: onChanged
+          _buildDropdown(
+            label: 'Country Of Birth', 
+            value: _birthCountry, 
+            items: countries, 
+            onChanged: (newValue) {
+              setState(() {
+                _birthCountry= newValue;
+              });
+            }
           ),
            const SizedBox(height: 10),
 
           // Country of citizenship/ Nationality
-           _buildDropdown(label: label, value: value, items: items, onChanged: onChanged),
+           _buildDropdown(
+            label: 'Country of citizenship', 
+            value: _citizenship, 
+            items: citizenship, 
+            onChanged: (citizenshipValue){
+              setState(() {
+                _citizenship = citizenshipValue;
+              });
+            }
+            ),
             const SizedBox(height: 10),
+
           // Tax resident other than India 
-           */
+        /*   Row(
+            children: [
+              Checkbox(
+                value: _yesCheck, 
+                onChanged: (bool? value) {
+                  setState(() {
+                    _yesCheck = value;
+                  });
+                }
+              ),
+              const SizedBox(width: 10),
+              Checkbox(
+                value: _noCheck, 
+                onChanged: (bool? value) {
+                  setState(() {
+                    _noCheck = value;
+                  });
+                }
+              ),
+
+            ],
+           ),*/
+           const SizedBox(height: 30),
+           ElevatedButton(
+            onPressed: (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) => const Nomineedetails(),
+                )
+              );
+            }, 
+            style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  textStyle: const TextStyle(fontSize: 16),
+             ),
+            child: const Text('Next'),
+           )
          ], 
         )
       ), 
