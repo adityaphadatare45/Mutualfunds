@@ -23,8 +23,8 @@ class _PersonaldetailsPage extends State<Personaldetails>{
    String? _annualIncome;
 
    // Check box state.
-   bool? _yesCheck;
-   bool? _noCheck;
+   bool? _yesCheck = false;
+   bool? _noCheck = false;
 
    // List for selection
    final List<String> holding = ['Single', 'Joint', 'Either or Survivor']; // Dropdown items
@@ -163,7 +163,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
             const SizedBox(height: 10),
 
           // Tax resident other than India 
-        /*   Row(
+           /*Row(
             children: [
               Checkbox(
                 value: _yesCheck, 
