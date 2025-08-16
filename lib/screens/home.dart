@@ -40,6 +40,7 @@ void initState() {
         onPageFinished: (url) {
           debugPrint('Page finished loading: $url');
         },
+        
         onWebResourceError: (error) {
           debugPrint('Web resource error: ${error.description}');
         },
