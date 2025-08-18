@@ -18,6 +18,7 @@ class _PersonaldetailsPage extends State<Personaldetails>{
    // Variable to hold the selected dropdown value
    String? _value; 
    String? _occupation;
+   String? _;
    String? _citizenship;
    String? _birthCountry;
    String? _annualIncome;

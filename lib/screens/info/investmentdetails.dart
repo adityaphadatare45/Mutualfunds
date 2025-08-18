@@ -68,7 +68,26 @@ class _InvestmentPage extends State<Investmentdetails> {
     'Other'
   ];
   
+  // Account type.
   final List<String> accountTypes = ['Savings', 'Current'];
+
+ // Equity fund scheme options.
+  final List<String> equityfundScheme = [
+   'Quantum Value Fund - Regular Plan IDCW Payout Option',
+   'Quantum Value Fund - Regular Plan IDCW Re-Investment Option',
+   'Quantum Value Fund - Regular Plan Growth Option',
+   'Quantum ELSS Tax Saver Fund - Regulat Plan IDCW ',
+   'Quantum ELSS Tax Saver Fund - Regulat Plan Growth',
+   'Quantum Equity Funds of Funds - Regular Plan IDCW Payout',
+   'Quantum Equity Funds of Funds - Regular Plan IDCW Re-Investment',
+   'Quantum Equity Funds of Funds - Regular Plan Growth',
+   '',
+   '',
+   '',
+  ];
+
+// 
+
 
   @override
   Widget build(BuildContext context) {

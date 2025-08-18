@@ -1,4 +1,5 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "gradle.debug": true
+    "gradle.debug": true,
+    "java.compile.nullAnalysis.mode": "automatic"
 }

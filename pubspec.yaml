@@ -56,6 +56,7 @@ dependencies:
   usb_debug_checker: ^0.0.2
   url_launcher: ^6.3.1
   provider: ^6.1.4
+  riverpod: ^2.6.1
   
 
 
