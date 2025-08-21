@@ -20,6 +20,8 @@ class _InvestmentPage extends State<Investmentdetails> {
   String? _paymentMode;
   String? _bankName;
   String? _accountType;
+  String? _equityfundScheme;
+
 
   final _totalInvestmentController = TextEditingController();
   final _ifscController = TextEditingController();
@@ -71,7 +73,7 @@ class _InvestmentPage extends State<Investmentdetails> {
   // Account type.
   final List<String> accountTypes = ['Savings', 'Current'];
 
- // Equity fund scheme options.
+ /// Equity fund scheme options :
   final List<String> equityfundScheme = [
    'Quantum Value Fund - Regular Plan IDCW Payout Option',
    'Quantum Value Fund - Regular Plan IDCW Re-Investment Option',
@@ -81,13 +83,26 @@ class _InvestmentPage extends State<Investmentdetails> {
    'Quantum Equity Funds of Funds - Regular Plan IDCW Payout',
    'Quantum Equity Funds of Funds - Regular Plan IDCW Re-Investment',
    'Quantum Equity Funds of Funds - Regular Plan Growth',
-   '',
-   '',
-   '',
+   'Quantum ESG Best In Class Strategy Fund - Regular Plan Growth',
+   'Quantum Small Cap Fund - Regular Plan Growth',
+   'Quantum Ethical Fund - Regular Growth',
   ];
 
-// 
+/// Debt fund schemes : 
+  final List<String> debtfundScheme =[
+    'Qunatum Liquid Fund - Regular Plan Daily IDCW Re-Investment',
+    'Qunatum Liquid Fund - Regular Plan Growth',
+    'Quantum Liquid Fund - Regular Plan Monthly IDCW Payout',
+    'Quantum Liquid Fund - Regular Plan Monthly IDCW Re-Investment',
+    'Quantum Dynamic Bond Fund - Regular Plan Growth',
+    'Quantum Dynamic Bond Fund - Regular Plan Monthly IDCW Payout',
+    'Quantum Dynamic Bond Fund - Regular Plan Monthly IDCW Re-Investment',
+  ];
 
+/// Multi asset scheme : 
+ final List<String> multiassetfunds =[
+
+ ];
 
   @override
   Widget build(BuildContext context) {
