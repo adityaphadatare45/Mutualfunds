@@ -10,17 +10,22 @@ class Investmentdetails extends StatefulWidget {
 
 class _InvestmentPage extends State<Investmentdetails> {
   final _formKey = GlobalKey<FormState>();
+  late final Map<String, List<String>> schemeCategories;
+
+  String? selectedScheme;
+  String? selectedOption;
+
 
   // State variables for dropdowns and text fields
   String? _plantype;
-  String? _schemeCategory;
+//   String? _schemeCategory;
   String? _investmentType;
   String? _holdingType;
   String? _physicalCopy;
   String? _paymentMode;
   String? _bankName;
   String? _accountType;
-  String? _equityfundScheme;
+  // String? _equityfundScheme;
 
 
   final _totalInvestmentController = TextEditingController();
@@ -30,13 +35,14 @@ class _InvestmentPage extends State<Investmentdetails> {
   // Dropdown options
   final List<String> planTypes = ['Direct', 'Regular'];
 
-  final List<String> schemeCategories = [
+ // Scheme categories : 
+  List<String> schemeCategoryList = [
     'Equity Fund',
     'Multi Assets',
-    'Gold',
+    'Gold Funds',
     'Debt',
     'Q Nifty',
-    'Hybrid'
+    'Hybrid Funds'
   ];
 
   final List<String> investmentTypes = [
@@ -101,8 +107,36 @@ class _InvestmentPage extends State<Investmentdetails> {
 
 /// Multi asset scheme : 
  final List<String> multiassetfunds =[
-
+   'Quantum Multi Assets Fund of Funds - Direct Plan Growth Option',
  ];
+
+ /// Gold asset scheme :
+ final List<String> goldassestfunds =[
+  'Quantum Gold Saving Fund - Direct Plan Growth',
+ ];
+
+ /// Q Nifty fund : 
+ final List<String> qniftyfunds =[
+ 'Quantum Nifty 50 Fund of Fund - Direct Plan Growth',
+ ];
+
+ /// Hybrid funds :
+ final List<String> hybridfunds =[
+  'Quantum Multi Assets Allocation Fund - Direct Plan Growth',
+ ];
+
+ @override
+ void initState(){
+  super.initState();
+ schemeCategories = {
+  "Equity Fund": equityfundScheme,
+  "Debt Fund": debtfundScheme,
+  "Multi Assets": multiassetfunds,
+  "Gold Funds": goldassestfunds,
+  "Q Nifty": qniftyfunds,
+  "Hybrid Funds": hybridfunds,
+  };
+}
 
   @override
   Widget build(BuildContext context) {
@@ -128,13 +162,53 @@ class _InvestmentPage extends State<Investmentdetails> {
                 items: planTypes,
                 onChanged: (val) => setState(() => _plantype = val),
               ),
-              // Scheme category
-              _buildDropdown(
-                label: 'Scheme Category',
-                value: _schemeCategory,
-                items: schemeCategories,
-                onChanged: (val) => setState(() => _schemeCategory = val),
+             // 1. Scheme Category dropdown
+              DropdownButtonFormField<String>(
+              value: selectedScheme,
+              decoration: const InputDecoration(
+               labelText: "Scheme Category",
+               border: OutlineInputBorder(),
+                ),
+              items: schemeCategories.keys.map((scheme) {
+               return DropdownMenuItem(
+               value: scheme,
+               child: Text(scheme),
+                );
+              }).toList(),
+                 onChanged: (value) {
+                 setState(() {
+                 selectedScheme = value;
+                 selectedOption = null; // reset scheme option when category changes
+                 });
+                },
+                validator: (val) => val == null ? 'Required' : null,
               ),
+
+               const SizedBox(height: 14),
+
+              // 2. Specific Scheme dropdown (depends on category)
+              if (selectedScheme != null)
+              DropdownButtonFormField<String>(
+               isExpanded: true,
+               value: selectedOption,
+               decoration: const InputDecoration(
+                labelText: "Select Scheme",
+                border: OutlineInputBorder(),
+               ),
+               items: schemeCategories[selectedScheme]!
+               .map((schemeOption) => DropdownMenuItem(
+                value: schemeOption,
+                child: Text(schemeOption),
+                ))
+               .toList(),
+               onChanged: (value) {
+                  setState(() {
+                  selectedOption = value;
+                 });
+                 },
+              validator: (val) => val == null ? 'Required' : null,
+              ),
+              const SizedBox(height : 5),
               // Investment type
               _buildDropdown(
                 label: 'Investment Type',
