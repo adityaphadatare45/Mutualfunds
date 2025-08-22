@@ -142,6 +142,7 @@ class _InvestmentPage extends State<Investmentdetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 48, 128, 194),
         title: const Text(
           'Investment Details',
           style: TextStyle(
