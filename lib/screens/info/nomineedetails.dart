@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:mobileOs/providers/nominee_provider.dart';
 import 'package:mobileOs/screens/info/investmentdetails.dart';
 
 class Nomineedetails extends StatefulWidget {
@@ -11,20 +12,7 @@ class Nomineedetails extends StatefulWidget {
 
 class _NomineePage extends State<Nomineedetails> {
   final _formKey = GlobalKey<FormState>();
-  DateTime? _dob;
-  String? _identityType;
-  String? _relation;
-  String? _countryCode;
-  String? _state;
-  String? _city;
-
-  final _nameController = TextEditingController();
-  final _dobController = TextEditingController();
-  final _relationController = TextEditingController();
-  final _allocationController = TextEditingController();
-  final _mobileController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _pincodeController = TextEditingController();
+  List<Nominee> nominees = [Nominee()]; // start with 1 nominee
 
   bool _noNominee = false; // checkbox state
 
@@ -36,7 +24,7 @@ class _NomineePage extends State<Nomineedetails> {
   final List<String> cities = ['City 1', 'City 2', 'City 3'];
 
   @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -67,154 +55,44 @@ class _NomineePage extends State<Nomineedetails> {
                     MaterialPageRoute(
                       builder: (context) => const Investmentdetails(),
                     ),
-                  ); // go immediately if checked
+                  );
                 }
               },
             ),
             const SizedBox(height: 10),
 
-            // Show form only if _noNominee is false
             if (!_noNominee)
               Expanded(
                 child: Form(
                   key: _formKey,
                   child: ListView(
                     children: [
-                      // Nominee name
-                      _buildTextField(
-                        controller: _nameController,
-                        label: 'Nominee Full Name',
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter nominee name';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
+                      for (int i = 0; i < nominees.length; i++)
+                        buildNomineeForm(i, nominees[i]),
 
-                      // Date of birth of nominee
-                      _buildDatePicker(),
-                      const SizedBox(height: 10),
-
-                      // Identity type
-                      _buildDropdown(
-                        label: 'Identity Type',
-                        value: _identityType,
-                        items: identityTypes,
-                        onChanged: (val) => setState(() => _identityType = val),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Relation with primary holder
-                      _buildDropdown(
-                        label: 'Relation with Primary Holder',
-                        value: _relation,
-                        items: relations,
-                        onChanged: (val) => setState(() => _relation = val),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Allocation to nominee in percentage
-                      _buildTextField(
-                        controller: _allocationController,
-                        label: 'Allocation (%)',
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter allocation percentage';
-                          }
-                          final percentage = double.tryParse(value);
-                          if (percentage == null || percentage < 0 || percentage > 100) {
-                            return 'Enter a valid percentage (0-100)';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Country code dropdown
-                      _buildDropdown(
-                        label: 'Country Code',
-                        value: _countryCode,
-                        items: countryCodes,
-                        onChanged: (val) => setState(() => _countryCode = val),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Mobile number
-                      _buildTextField(
-                        controller: _mobileController,
-                        label: 'Mobile Number',
-                        keyboardType: TextInputType.phone,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter mobile number';
-                          }
-                          if (value.length < 10) {
-                            return 'Enter a valid mobile number';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Email ID
-                      _buildTextField(
-                        controller: _emailController,
-                        label: 'Email ID',
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter email ID';
-                          }
-                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                            return 'Enter a valid email ID';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 10),
-
-                      // State
-                      _buildDropdown(
-                        label: 'State',
-                        value: _state,
-                        items: states,
-                        onChanged: (val) => setState(() => _state = val),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // City
-                      _buildDropdown(
-                        label: 'City',
-                        value: _city,
-                        items: cities,
-                        onChanged: (val) => setState(() => _city = val),
-                      ),
-                      const SizedBox(height: 10),
-
-                      // City Pincode
-                      _buildTextField(
-                        controller: _pincodeController,
-                        label: 'City Pincode',
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter pincode';
-                          }
-                          if (value.length != 6) {
-                            return 'Enter a valid 6-digit pincode';
-                          }
-                          return null;
-                        },
-                      ),
                       const SizedBox(height: 20),
 
-                      // Next button
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          setState(() {
+                            nominees.add(Nominee());
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                        label: const Text("Add Nominee"),
+                      ),
+
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
+                            // Collect nominee data
+                            for (var nominee in nominees) {
+                              debugPrint("Nominee: ${nominee.nameController.text}, "
+                                  "Relation: ${nominee.relation}, "
+                                  "DOB: ${nominee.dobController.text}");
+                            }
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -234,12 +112,77 @@ class _NomineePage extends State<Nomineedetails> {
       ),
     );
   }
+   Widget buildNomineeForm(int index, Nominee nominee) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Nominee ${index + 1}",
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                if (nominees.length > 1)
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () {
+                      setState(() {
+                        nominees.removeAt(index);
+                      });
+                    },
+                  ),
+              ],
+            ),
+            const SizedBox(height: 10),
 
+            _buildTextField(controller: nominee.nameController, label: "Nominee Full Name"),
+            _buildDatePicker(nominee),
+            _buildDropdown(
+              label: "Identity Type",
+              value: nominee.identityType,
+              items: identityTypes,
+              onChanged: (val) => setState(() => nominee.identityType = val),
+            ),
+            _buildDropdown(
+              label: "Relation with Primary Holder",
+              value: nominee.relation,
+              items: relations,
+              onChanged: (val) => setState(() => nominee.relation = val),
+            ),
+            _buildTextField(controller: nominee.allocationController, label: "Allocation (%)", keyboardType: TextInputType.number),
+            _buildDropdown(
+              label: "Country Code",
+              value: nominee.countryCode,
+              items: countryCodes,
+              onChanged: (val) => setState(() => nominee.countryCode = val),
+            ),
+            _buildTextField(controller: nominee.mobileController, label: "Mobile Number", keyboardType: TextInputType.phone),
+            _buildTextField(controller: nominee.emailController, label: "Email ID", keyboardType: TextInputType.emailAddress),
+            _buildDropdown(
+              label: "State",
+              value: nominee.state,
+              items: states,
+              onChanged: (val) => setState(() => nominee.state = val),
+            ),
+            _buildDropdown(
+              label: "City",
+              value: nominee.city,
+              items: cities,
+              onChanged: (val) => setState(() => nominee.city = val),
+            ),
+            _buildTextField(controller: nominee.pincodeController, label: "City Pincode", keyboardType: TextInputType.number),
+          ],
+        ),
+      ),
+    );
+  }
   Widget _buildTextField({
     required TextEditingController controller,
     required String label,
     TextInputType? keyboardType,
-    String? Function(String?)? validator,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -250,18 +193,33 @@ class _NomineePage extends State<Nomineedetails> {
           border: const OutlineInputBorder(),
         ),
         keyboardType: keyboardType,
-        validator: validator,
+        validator: (value) {
+          if (value == null || value.isEmpty) return 'Required';
+          return null;
+        },
       ),
     );
   }
-
-  Widget _buildDatePicker() {
+  Widget _buildDatePicker(Nominee nominee) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: TextFormField(
-        controller: _dobController,
+        controller: nominee.dobController,
         readOnly: true,
-        onTap: _selectDOB,
+        onTap: () async {
+          final picked = await showDatePicker(
+            context: context,
+            initialDate: DateTime(2000),
+            firstDate: DateTime(1950),
+            lastDate: DateTime.now(),
+          );
+          if (picked != null) {
+            setState(() {
+              nominee.dob = picked;
+              nominee.dobController.text = DateFormat('dd/MM/yyyy').format(picked);
+            });
+          }
+        },
         decoration: const InputDecoration(
           labelText: 'Date of Birth *',
           border: OutlineInputBorder(),
@@ -271,22 +229,6 @@ class _NomineePage extends State<Nomineedetails> {
       ),
     );
   }
-
-  Future<void> _selectDOB() async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2000),
-      firstDate: DateTime(1950),
-      lastDate: DateTime.now(),
-    );
-    if (picked != null) {
-      setState(() {
-        _dob = picked;
-        _dobController.text = DateFormat('dd/MM/yyyy').format(picked);
-      });
-    }
-  }
-
   Widget _buildDropdown({
     required String label,
     required String? value,

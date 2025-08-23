@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobileOs/providers/counter_provider.dart';
+import 'package:mobileOs/screens/home.dart';
 
 class NewSip extends StatefulWidget{
   const NewSip({super.key});
@@ -205,7 +206,7 @@ void _refresh() {
                  },
               validator: (val) => val == null ? 'Required' : null,
               ),
-              const SizedBox(height : 5),
+              const SizedBox(height : 10),
 
           //Sip frequency dropdown
           _buildDropdown(
@@ -267,6 +268,32 @@ void _refresh() {
              ],
             ),
            ],
+          ),
+          const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    // Handle form submission or navigation
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('New SIP Saved!')),
+                    );
+                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomePage(token: ''),
+                    )
+                  );
+                },
+                 style: ElevatedButton.styleFrom(
+                   backgroundColor: const Color.fromARGB(255, 102, 140, 206),
+                   textStyle: const TextStyle(fontSize: 16),
+                   shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10), 
+                   ),
+                   padding: const EdgeInsets.all(8),
+                  ),                
+                child: const Text('Submit'),
           ),
          ],
         ),
@@ -334,7 +361,7 @@ void _refresh() {
         readOnly: true,
         onTap: _selectDOB,
         decoration: const InputDecoration(
-          labelText: 'Enrollment Period *',
+          labelText: 'Enrollment Period',
           border: OutlineInputBorder(),
           suffixIcon: Icon(Icons.calendar_today),
         ),

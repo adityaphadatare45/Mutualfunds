@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart'; // Used to authenticate the u
 // Used to fire base initialization. 
 import 'package:flutter/material.dart';            //Flutter have two main widgets material and cupertino.
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mobileOs/providers/nominee_provider.dart';
 import 'package:mobileOs/screens/Welcomescreen.dart';                                                 // Material is used for android and cupertino is used for ios.
 import 'package:mobileOs/screens/home.dart';
+import 'package:mobileOs/screens/info/nomineedetails.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Provides persistent storage for simple data in key-value pairs.
 
 
@@ -40,7 +42,8 @@ class MyApp extends StatelessWidget {
       title: 'Mutual Funds',
       theme: ThemeData(primarySwatch: Colors.blue    // The theme of the app is set to blue color.
       ),
-      home: const WelcomeScreen(), // set authwrapper as the home page . 
+      home: const WelcomeScreen(), 
+      // set authwrapper as the home page . 
       //home: const Splashscreen(),
       // Use AuthWrapper to handle login state / checks whether the user is logged in and redirects accordingly.
     );   

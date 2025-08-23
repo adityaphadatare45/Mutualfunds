@@ -14,9 +14,7 @@ class _NewPurchaseState extends State<NewPurchase> {
 
   String? _residentialCategory;
   String? _relationshipEmail;
-  String? _relationshipMobile;
   String? _countryCode;
-  DateTime? _dob;
   bool _isOtpSectionVisible = false;
 
   final _dobController = TextEditingController();
@@ -145,7 +143,7 @@ class _NewPurchaseState extends State<NewPurchase> {
                   validator: (val) =>
                       val != null && val.length == 6 ? null : 'Enter 6-digit OTP',
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 30),
                 ElevatedButton.icon(
                   onPressed: () {
                     if (_otpController.text == '123456') {
@@ -167,11 +165,13 @@ class _NewPurchaseState extends State<NewPurchase> {
                   icon: const Icon(Icons.verified_user),
                   label: const Text('Verify'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    
-                  ),
-                  
+                   backgroundColor: const Color.fromARGB(255, 102, 140, 206),
+                   textStyle: const TextStyle(fontSize: 16),
+                   shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10), 
+                   ),
+                   padding: const EdgeInsets.all(8),
+                  ),  
                 ),
               ],
             ],
@@ -250,7 +250,6 @@ class _NewPurchaseState extends State<NewPurchase> {
     );
     if (picked != null) {
       setState(() {
-        _dob = picked;
         _dobController.text = DateFormat('dd/MM/yyyy').format(picked);
       });
     }
