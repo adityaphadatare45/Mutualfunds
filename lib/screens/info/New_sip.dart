@@ -13,7 +13,6 @@ class _SipPage extends State<NewSip>{
   final _formKey = GlobalKey<FormState>();
   final Counter counter = Counter(); // shared object
   late final Map<String, List<String>> categories;
-  late int _value;
 
   final _ammountController = TextEditingController();
   final _enrollmetController = TextEditingController();
@@ -24,7 +23,6 @@ class _SipPage extends State<NewSip>{
   String? _Sip;
   String? _Plantype;
   String? _frequency;
-  DateTime? _dateTime;
 
 
  // Sip list 
@@ -380,7 +378,6 @@ void _refresh() {
     );
     if (picked != null) {
       setState(() {
-        _dateTime = picked;
         _enrollmetController.text = DateFormat('dd/MM/yyyy').format(picked);
       });
     }
