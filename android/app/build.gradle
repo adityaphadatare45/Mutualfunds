@@ -50,8 +50,8 @@ android {
         minSdkVersion 23
         targetSdkVersion 33
         targetSdk = flutter.targetSdkVersion
-        versionCode 3       // <- Make sure this is updated!
-        versionName "1.0.2" // <- Optional but helpful
+        versionCode 5      // <- Make sure this is updated!
+        versionName "1.0.4" // <- Optional but helpful
         multiDexEnabled true
     }
 

@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart'; // Used to authenticate the u
 // Used to fire base initialization. 
 import 'package:flutter/material.dart';            //Flutter have two main widgets material and cupertino.
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mobileOs/providers/nominee_provider.dart';
 import 'package:mobileOs/screens/Welcomescreen.dart';                                                 // Material is used for android and cupertino is used for ios.
 import 'package:mobileOs/screens/home.dart';
-import 'package:mobileOs/screens/info/nomineedetails.dart';
+
 import 'package:shared_preferences/shared_preferences.dart'; // Provides persistent storage for simple data in key-value pairs.
 
 
